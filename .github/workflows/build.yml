@@ -32,7 +32,7 @@ jobs:
 
   build_right:
     needs: build
-    uses: zmkfirmware/zmk-config/.github/workflows/build-user-config.yml@main
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     with:
       # nRF52832の汎用ボードを使用
       board: nrf52dk_nrf52832
