@@ -12,21 +12,14 @@ on:
 
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-shield.yml@main
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     
     with:
-      # ZMKのバージョンを指定 (安定版のタグを指定推奨, e.g., @v3.6.0)
-      # ここでは一旦 @main を維持
+      # 設定ディレクトリ（reusable workflow の `config_path`）
+      config_path: config
       
-      # 使用するボードを指定 (nRF52832)
-      board: nrf52dk_nrf52832
+      # ビルドマトリクスファイル (左右のボード・シールド定義)
+      build_matrix_path: build.yaml
       
-      # 使用するカスタム設定ファイル
-      conf_file: config/caravelle.conf
-      
-      # 左右両方のシールドをYAML配列形式で渡します
-      shields: |
-        - shield: caravelle_left
-          build_arg_file_prefix: caravelle_ble_left
-        - shield: caravelle_right
-          build_arg_file_prefix: caravelle_ble_right
+      # 出力アーカイブ名
+      archive_name: caravelle_ble
