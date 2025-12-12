@@ -36,7 +36,7 @@
         diode-direction = "col2row"; 
 
         // Row Pin: P0.0
-        row-gpios = <&gpio0 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        row-gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>;
             
         // Col Pins: P0.16, P0.11, P0.6, P0.3, ... P0.25 (計 24本)
         col-gpios
