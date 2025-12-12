@@ -73,6 +73,10 @@
 
         // ZMK のレイヤー名
         // _QWERTY = 0, _LOWER = 1, _RAISE = 2, _ADJUST = 3
+        #define QWERTY 0
+        #define LOWER 1
+        #define RAISE 2
+        #define ADJUST 3
 
         // Fillers
         #define _______ &trans
