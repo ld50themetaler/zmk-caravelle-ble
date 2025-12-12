@@ -1,0 +1,51 @@
+# GitHub Actions で ZMK ファームウェアをビルドするためのワークフロー
+name: Build Caravelle BLE ZMK Firmware
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # config/ フォルダ内のファイルが変更されたときにビルドをトリガー
+      - 'config/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: zmkfirmware/zmk-config/.github/workflows/build-user-config.yml@main
+    with:
+      # nRF52832の汎用ボードを使用
+      board: nrf52dk_nrf52832
+      
+      # ZMKの設定ファイル (内部クロック有効化など)
+      conf_file: config/caravelle.conf
+      
+      # 左手側のファームウェアをビルド
+      shield: caravelle_left
+      
+      # リリースファイル名に含めるプレフィックス
+      build_arg_file_prefix: caravelle_ble_left
+      
+    secrets:
+      # secrets.GITHUB_TOKEN を使用してリリースを作成
+      token: ${{ secrets.GITHUB_TOKEN }}
+
+  build_right:
+    needs: build
+    uses: zmkfirmware/zmk-config/.github/workflows/build-user-config.yml@main
+    with:
+      # nRF52832の汎用ボードを使用
+      board: nrf52dk_nrf52832
+      
+      # ZMKの設定ファイル (内部クロック有効化など)
+      conf_file: config/caravelle.conf
+      
+      # 右手側のファームウェアをビルド
+      shield: caravelle_right
+      
+      # リリースファイル名に含めるプレフィックス
+      build_arg_file_prefix: caravelle_ble_right
+      
+    secrets:
+      # secrets.GITHUB_TOKEN を使用してリリースを作成
+      token: ${{ secrets.GITHUB_TOKEN }}

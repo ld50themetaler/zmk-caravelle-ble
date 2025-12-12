@@ -1,0 +1,7 @@
+#include "caravelle.dtsi"
+
+&default_transform {
+    col-offset = <0>;
+};
+
+// kscan0の定義は dtsi から継承
