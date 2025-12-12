@@ -1,13 +1,6 @@
 board:
-  name: "Caravelle BLE"
-  url: "https://github.com/zmkfirmware/zmk"
-  vendor: "ZMK Contributors"
-  soc: "nrf52832"
-
-build:
-  identifier: "caravelle"
-  arch: "arm"
-  type: "keyboard"
-  outputs:
-    - ble
+  name: Caravelle BLE
+  vendor: zmk-contributors
+  socs:
+    - name: nrf52832
 
