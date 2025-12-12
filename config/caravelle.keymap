@@ -73,7 +73,6 @@
 
         // ZMK のレイヤー名
         // _QWERTY = 0, _LOWER = 1, _RAISE = 2, _ADJUST = 3
-        enum { QWERTY, LOWER, RAISE, ADJUST };
 
         // Fillers
         #define _______ &trans
