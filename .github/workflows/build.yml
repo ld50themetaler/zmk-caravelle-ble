@@ -20,9 +20,7 @@ jobs:
       # 出力アーカイブ名（デフォルトは "firmware"）
       archive_name: caravelle_ble_left
       
-    secrets:
-      # secrets.GITHUB_TOKEN を使用してリリースを作成
-      token: ${{ secrets.GITHUB_TOKEN }}
+    
 
   build_right:
     needs: build
@@ -34,6 +32,4 @@ jobs:
       # 出力アーカイブ名（デフォルトは "firmware"）
       archive_name: caravelle_ble_right
       
-    secrets:
-      # secrets.GITHUB_TOKEN を使用してリリースを作成
-      token: ${{ secrets.GITHUB_TOKEN }}
+    
