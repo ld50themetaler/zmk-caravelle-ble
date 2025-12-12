@@ -1,2 +1,4 @@
 build:
-  settings-file: null
+  cmake: .
+  settings-file: ""
+

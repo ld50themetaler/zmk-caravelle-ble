@@ -9,6 +9,5 @@ build:
   arch: "arm"
   type: "keyboard"
   outputs:
-    - usb
     - ble
 
