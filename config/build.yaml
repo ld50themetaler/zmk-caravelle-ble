@@ -3,11 +3,11 @@
 
 include:
   # 左手側のビルド設定
-  - board: nrf52dk_nrf52832
+  - board: caravelle
     shield: caravelle_left
     artifact-name: caravelle_ble_left
 
   # 右手側のビルド設定
-  - board: nrf52dk_nrf52832
+  - board: caravelle
     shield: caravelle_right
     artifact-name: caravelle_ble_right

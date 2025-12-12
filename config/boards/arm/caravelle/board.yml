@@ -1,0 +1,8 @@
+identifier: caravelle
+name: Caravelle BLE
+type: keyboard
+arch: arm
+outputs:
+  - usb
+  - ble
+url: https://github.com/zmkfirmware/zmk/tree/main/app/boards/arm/caravelle

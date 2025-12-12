@@ -1,0 +1,9 @@
+if BOARD_CARAVELLE
+
+config BOARD
+	default "caravelle"
+
+config SOC
+	default "NRF52832"
+
+endif
