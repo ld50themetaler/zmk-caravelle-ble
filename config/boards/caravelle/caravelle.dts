@@ -1,5 +1,6 @@
 /dts-v1/;
-#include <nordic/nrf52832_qiaa.dtsi>
+#include <zephyr/dt-bindings/zmk/matrix.h>
+#include <dt-bindings/zmk/kscan.h>
 #include "caravelle-pinctrl.dtsi"
 
 / {
