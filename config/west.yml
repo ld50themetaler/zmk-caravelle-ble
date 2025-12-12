@@ -1,0 +1,20 @@
+manifest:
+  version: "0.13"
+  
+  # ZMK リポジトリのマニフェストを継承
+  # (ZMK v0.3 は Zephyr 3.5 を使用、main は Zephyr 4.1 を使用)
+  self:
+    path: config
+
+  # ローカルプロジェクト（このリポジトリ）
+  projects:
+    # ZMK ファームウェアの main ブランチを使用
+    - name: zmk
+      remote: zmkfirmware
+      revision: main
+      import: app/west.yml
+
+  # リモートリポジトリの定義
+  remotes:
+    - name: zmkfirmware
+      url-base: https://github.com/zmkfirmware
