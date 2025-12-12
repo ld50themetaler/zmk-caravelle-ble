@@ -1,6 +1,6 @@
-#dts-v1/;
+/dts-v1/;
 #include <dt-bindings/zmk/matrix_transform.h>
-#include <dt-bindings/zmk/kscan.h>
+// kscan dt-bindings header not required here; removed to avoid preprocessing error
 #include "caravelle-pinctrl.dtsi"
 
 / {
