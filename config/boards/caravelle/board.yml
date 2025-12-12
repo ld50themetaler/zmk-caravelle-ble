@@ -1,5 +1,5 @@
 board:
-  name: Caravelle BLE
+  name: caravelle
   vendor: zmk-contributors
   socs:
     - name: nrf52832

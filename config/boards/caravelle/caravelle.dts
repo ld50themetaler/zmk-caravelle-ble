@@ -4,7 +4,7 @@
 
 / {
 	model = "Caravelle BLE";
-	compatible = "caravelle";
+	compatible = "zmk-contributors,caravelle";
 
 	chosen {
 		zephyr,code-partition = &code_partition;
