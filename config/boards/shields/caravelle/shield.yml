@@ -1,0 +1,20 @@
+shield:
+  name: caravelle
+  type: keyboard
+  output: usb
+  features:
+    - keys
+  
+  # シールドのベンダー/デザイナー情報
+  vendor: ld50
+  
+  # このシールドがサポートするボード
+  compatible:
+    - nrf52dk_nrf52832
+
+  # 左右分割用の追加シールド定義（サブシールド）
+  shields:
+    - name: caravelle_left
+      type: left
+    - name: caravelle_right
+      type: right

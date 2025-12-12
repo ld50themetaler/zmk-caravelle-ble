@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    uses: ./.github/workflows/build-user-config.yml
     
     with:
       # 設定ディレクトリ（reusable workflow の `config_path`）
