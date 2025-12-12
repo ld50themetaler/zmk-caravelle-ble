@@ -14,17 +14,11 @@ jobs:
   build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     with:
-      # nRF52832の汎用ボードを使用
-      board: nrf52dk_nrf52832
-      
-      # ZMKの設定ファイル (内部クロック有効化など)
-      conf_file: config/caravelle.conf
-      
-      # 左手側のファームウェアをビルド
-      shield: caravelle_left
-      
-      # リリースファイル名に含めるプレフィックス
-      build_arg_file_prefix: caravelle_ble_left
+      # 設定ディレクトリ（reusable workflow の `config_path`）
+      config_path: config
+
+      # 出力アーカイブ名（デフォルトは "firmware"）
+      archive_name: caravelle_ble_left
       
     secrets:
       # secrets.GITHUB_TOKEN を使用してリリースを作成
@@ -34,17 +28,11 @@ jobs:
     needs: build
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     with:
-      # nRF52832の汎用ボードを使用
-      board: nrf52dk_nrf52832
-      
-      # ZMKの設定ファイル (内部クロック有効化など)
-      conf_file: config/caravelle.conf
-      
-      # 右手側のファームウェアをビルド
-      shield: caravelle_right
-      
-      # リリースファイル名に含めるプレフィックス
-      build_arg_file_prefix: caravelle_ble_right
+      # 設定ディレクトリ（reusable workflow の `config_path`）
+      config_path: config
+
+      # 出力アーカイブ名（デフォルトは "firmware"）
+      archive_name: caravelle_ble_right
       
     secrets:
       # secrets.GITHUB_TOKEN を使用してリリースを作成
