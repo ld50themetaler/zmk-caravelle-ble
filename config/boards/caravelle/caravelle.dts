@@ -1,7 +1,7 @@
 /* Minimal board DTS for Caravelle to allow devicetree preprocessing in CI.
  * Add peripherals/back references as needed later. */
 /dts-v1/;
-#include <arm/nordic/nrf52832.dtsi>
+#include <nordic/nrf52832_qfaa.dtsi>
 #include <dt-bindings/zmk/matrix_transform.h>
 
 / {
@@ -9,4 +9,8 @@
 	compatible = "zmk-contributors,caravelle";
 
 
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+	};
 };
