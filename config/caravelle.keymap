@@ -153,7 +153,7 @@
                 // Left Hand
                 _______ &bt BT_CLR &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4
                 _______ &bt BT_CLR  &none &none &none &none &none
-                _______ &bt BT_SEL 0 &none &none &reset &none &none
+                _______ &bt BT_SEL 0 &none &none &sys_reset &none &none
                 
                 // Filler for 4th row left (4 keys)
                 XXXXXXX XXXXXXX XXXXXXX XXXXXXX
