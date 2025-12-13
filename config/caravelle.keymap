@@ -108,18 +108,18 @@
                 // Left Hand
                 _______ &kp F1  &kp F2  &kp F3  &kp F4  &kp F5
                 _______ &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &mo ADJUST
-                _______ &kp F11 &kp F12 &kp PSCR &kp SLCK &kp INSERT &kp TRNS
+                _______ &kp F11 &kp F12 &kp PSCR &kp SLCK &kp INSERT &trans
                 
                 // Filler for 4th row left (4 keys)
                 XXXXXXX XXXXXXX XXXXXXX XXXXXXX
 
                 // Right Hand
-                &none   &kp HOME &kp PGDN &kp PGUP &kp END &kp TRNS
-                _______ &alt_grav_macro &kp LEFT &kp DOWN &kp UP &kp RIGHT &kp TRNS
-                _______ &none   &none   &none   &none   &none   &kp TRNS
+                &none   &kp HOME &kp PGDN &kp PGUP &kp END &trans
+                _______ &alt_grav_macro &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans
+                _______ &none   &none   &none   &none   &none   &trans
 
                 // Filler for 4th row right (4 keys)
-                _______ &lt LOWER &kp DEL _______ _______ _______ _______ _______
+                _______ &lt LOWER DEL _______ _______ _______ _______ _______
             >;
         };
 
@@ -128,16 +128,16 @@
             bindings = <
                 // Left Hand
                 _______ &kp N1  &kp N2  &kp N3  &kp N4  &kp N5
-                _______ &none   &none   &kp ESC &none   &kp TAB &kp TRNS
-                _______ &none   &none   &none   &none   &none   &kp TRNS
+                _______ &none   &none   &kp ESC &none   &kp TAB &trans
+                _______ &none   &none   &none   &none   &none   &trans
                 
                 // Filler for 4th row left (4 keys)
                 XXXXXXX XXXXXXX XXXXXXX XXXXXXX
 
                 // Right Hand
-                &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &kp TRNS
-                _______ &kp LBRC &kp RBRC &kp SLASH &kp EQUAL &kp MINUS &kp TRNS
-                _______ &kp GRAVE &kp BSLH &none &none &none   &kp TRNS
+                &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &trans
+                _______ &kp LBRC &kp RBRC &kp SLASH &kp EQUAL &kp MINUS &trans
+                _______ &kp GRAVE &kp BSLH &none &none &none   &trans
 
                 // Filler for 4th row right (4 keys)
                 _______ _______ _______ _______ _______ _______ _______ _______
