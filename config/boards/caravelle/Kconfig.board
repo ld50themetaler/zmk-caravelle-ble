@@ -2,4 +2,4 @@
 
 config BOARD_CARAVELLE
 	bool "Caravelle BLE"
-	depends on SOC_NRF52832_QFAA
+	select SOC_NRF52832_QFAA
