@@ -51,7 +51,7 @@
                 &kp LSFT &kp SCLN &kp Q    &kp J   &kp K     &kp X     &kp LBRC
                 
                 // Filler for 4th row left (4 keys)
-                XXXXXXX XXXXXXX XXXXXXX XXXXXXX
+                &kp TAB BSPC_ALT &mo LOWER SPC_SHF
 
                 // Right Hand
                 &kp F   &kp G   &kp C     &kp R   &kp L     &kp SLASH
@@ -59,7 +59,7 @@
                 &kp RBRC &kp B  &kp M     &kp W   &kp V     &kp Z     &kp RSFT
 
                 // Filler for 4th row right (4 keys)
-                &kp TAB BSPC_ALT &mo LOWER SPC_SHF ENT_CTL &mo RAISE &kp TAB &kp LALT
+                ENT_CTL &mo RAISE &kp TAB &kp LALT
             >;
         };
 
@@ -72,7 +72,8 @@
                 _______ &kp F11 &kp F12 &kp PSCRN &kp SLCK &kp INS &trans
                 
                 // Filler for 4th row left (4 keys)
-                XXXXXXX XXXXXXX XXXXXXX XXXXXXX
+                // Filler for 4th row left (4 keys)
+                _______ &lt LOWER DEL _______ _______
 
                 // Right Hand
                 &none   &kp HOME &kp PGDN &kp PGUP &kp END &trans
@@ -80,7 +81,7 @@
                 _______ &none   &none   &none   &none   &none   &trans
 
                 // Filler for 4th row right (4 keys)
-                _______ &lt LOWER DEL _______ _______ _______ _______ _______
+                _______ _______ _______ _______
             >;
         };
 
@@ -93,7 +94,7 @@
                 _______ &none   &none   &none   &none   &none   &trans
                 
                 // Filler for 4th row left (4 keys)
-                XXXXXXX XXXXXXX XXXXXXX XXXXXXX
+                _______ _______ _______ _______
 
                 // Right Hand
                 &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &trans
@@ -101,7 +102,7 @@
                 _______ &kp GRAVE &kp BSLH &none &none &none   &trans
 
                 // Filler for 4th row right (4 keys)
-                _______ _______ _______ _______ _______ _______ _______ _______
+                _______ _______ _______ _______
             >;
         };
 
@@ -117,15 +118,15 @@
                 _______ &bt BT_SEL 0 &none &none &sys_reset &none &none
                 
                 // Filler for 4th row left (4 keys)
-                XXXXXXX XXXXXXX XXXXXXX XXXXXXX
-                
+                _______ _______ _______ _______
+
                 // Right Hand
                 &none &none &none &none &none &none
                 &none &none &none &none &none &none &none
                 &none &none &none &none &none &none &none
 
                 // Filler for 4th row right (4 keys)
-                _______ _______ _______ _______ _______ _______ _______ _______
+                _______ _______ _______ _______
             >;
         };
     };
