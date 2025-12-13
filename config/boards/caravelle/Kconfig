@@ -1,10 +1,12 @@
 # Caravelle BLE board configuration
 
+config BOARD_CARAVELLE
+	bool "Caravelle BLE"
+	select SOC_NRF52832_QFAA
+
 if BOARD_CARAVELLE
 
 config BOARD
 	default "caravelle"
-
-
 
 endif # BOARD_CARAVELLE
