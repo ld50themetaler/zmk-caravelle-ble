@@ -2,6 +2,12 @@
 #include <dt-bindings/zmk/bt.h>
 #include <behaviors.dtsi>
 
+#define ESC_GUI &mt LGUI ESC
+#define TAB_CTL &mt LCTL TAB
+#define BSPC_ALT &mt LALT BSPC
+#define SPC_SHF &mt LSFT SPACE
+#define ENT_CTL &mt RCTL ENTER
+
 / {
     // ========== 1. カスタムビヘイビアの定義 ==========
 
@@ -19,52 +25,7 @@
         >;
     };
 
-    // QMKの MO/LT/TT キーコードに対応するレイヤー定義
-    
-    // LGUI_T(KC_ESC) : タップで ESC、ホールドで LGUI
-    esc_gui: esc_gui {
-        compatible = "zmk,behavior-hold-tap";
-        label = "ESC_GUI";
-        #binding-cells = <0>;
-        tapping-term-ms = <200>;
-        bindings = <&kp ESC>, <&kp LGUI>;
-    };
-
-    // LCTL_T(KC_TAB) : タップで TAB、ホールドで LCTL
-    tab_ctl: tab_ctl {
-        compatible = "zmk,behavior-hold-tap";
-        label = "TAB_CTL";
-        #binding-cells = <0>;
-        tapping-term-ms = <200>;
-        bindings = <&kp TAB>, <&kp LCTL>;
-    };
-
-    // LALT_T(KC_BSPC) : タップで BSPC、ホールドで LALT
-    bspc_alt: bspc_alt {
-        compatible = "zmk,behavior-hold-tap";
-        label = "BSPC_ALT";
-        #binding-cells = <0>;
-        tapping-term-ms = <200>;
-        bindings = <&kp BSPC>, <&kp LALT>;
-    };
-
-    // LSFT_T(KC_SPC) : タップで SPACE、ホールドで LSFT
-    spc_shf: spc_shf {
-        compatible = "zmk,behavior-hold-tap";
-        label = "SPC_SHF";
-        #binding-cells = <0>;
-        tapping-term-ms = <200>;
-        bindings = <&kp SPACE>, <&kp LSFT>;
-    };
-
-    // RCTL_T(KC_ENT) : タップで ENT、ホールドで RCTL
-    ent_ctl: ent_ctl {
-        compatible = "zmk,behavior-hold-tap";
-        label = "ENT_CTL";
-        #binding-cells = <0>;
-        tapping-term-ms = <200>;
-        bindings = <&kp ENTER>, <&kp RCTL>;
-    };
+    // Definitions moved to #define macros
     
     // ========== 2. キーマップレイヤーの定義 ==========
 
@@ -85,8 +46,8 @@
         default_layer {
             bindings = <
                 // Left Hand
-                &esc_gui &kp SQT &kp COMMA &kp DOT &kp P     &kp Y   
-                &tab_ctl &kp A   &kp O     &kp E   &kp U     &kp I     &kp LPAR
+                ESC_GUI &kp SQT &kp COMMA &kp DOT &kp P     &kp Y   
+                TAB_CTL &kp A   &kp O     &kp E   &kp U     &kp I     &kp LPAR
                 &kp LSFT &kp SCLN &kp Q    &kp J   &kp K     &kp X     &kp LBRC
                 
                 // Filler for 4th row left (4 keys)
@@ -98,7 +59,7 @@
                 &kp RBRC &kp B  &kp M     &kp W   &kp V     &kp Z     &kp RSFT
 
                 // Filler for 4th row right (4 keys)
-                &kp TAB &bspc_alt &mo LOWER &spc_shf &ent_ctl &mo RAISE &kp TAB &kp LALT
+                &kp TAB BSPC_ALT &mo LOWER SPC_SHF ENT_CTL &mo RAISE &kp TAB &kp LALT
             >;
         };
 
