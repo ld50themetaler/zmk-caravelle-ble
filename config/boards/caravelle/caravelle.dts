@@ -8,11 +8,12 @@
 	model = "Caravelle BLE";
 	compatible = "zmk-contributors,caravelle";
 
-
 	chosen {
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
+		zephyr,settings-partition = &storage_partition;
 	};
+
 };
 
 &gpio0 {
@@ -21,4 +22,24 @@
 
 &gpiote {
 	status = "okay";
+};
+
+&flash0 {
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        /* 0x00000 から 0x60000 (384KB) をアプリに使用 */
+        code_partition: partition@0 {
+            label = "code_partition";
+            reg = <0x00000000 0x00060000>;
+        };
+
+        /* 0x60000 から 0x20000 (128KB) を保存領域に使用 */
+        storage_partition: partition@60000 {
+            label = "storage_partition";
+            reg = <0x00060000 0x00020000>;
+        };
+    };
 };

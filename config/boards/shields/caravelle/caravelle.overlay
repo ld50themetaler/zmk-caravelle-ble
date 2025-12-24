@@ -1,0 +1,3 @@
+#include "caravelle.dtsi"
+
+// シングルボード（非スプリット）モード用

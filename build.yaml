@@ -1,0 +1,8 @@
+# ZMK Build Matrix
+# zmkfirmware/zmk の build-user-config.yml が読み込むビルド定義ファイル
+
+include:
+  # シングルボード（非スプリット）版
+  - board: caravelle
+    shield: caravelle
+    artifact-name: caravelle_ble_single
