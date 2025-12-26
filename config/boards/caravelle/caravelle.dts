@@ -11,9 +11,17 @@
 	chosen {
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
-		zephyr,settings-partition = &storage_partition;
+        zephyr,code-partition = &code_partition;
+        zephyr,settings-partition = &storage_partition;
+        //zmk,battery = &vbatt;
 	};
 
+    // vbatt: vbatt {
+    //     compatible = "zmk,battery-voltage-divider";
+    //     io-channels = <&adc 2>; // TODO 正しいピンを設定
+    //     output-ohms = <2000000>; // TODO 正しい電圧を設定
+    //     full-ohms = <(2000000 + 806000)>;
+    // };
 };
 
 &gpio0 {
@@ -30,16 +38,24 @@
         #address-cells = <1>;
         #size-cells = <1>;
 
-        /* 0x00000 から 0x60000 (384KB) をアプリに使用 */
-        code_partition: partition@0 {
+        /* 0x00000 から 0x7a000 (488KB) をコード領域に使用 */
+        code_partition: partition@00000 {
             label = "code_partition";
-            reg = <0x00000000 0x00060000>;
+            reg = <0x00000000 0x0007a000>;
         };
 
-        /* 0x60000 から 0x20000 (128KB) を保存領域に使用 */
-        storage_partition: partition@60000 {
+        /* 0x7a000 から 0x6000 (24KB) を保存領域に使用 */
+        storage_partition: partition@7a000 {
             label = "storage_partition";
-            reg = <0x00060000 0x00020000>;
+            reg = <0x0007a000 0x0006000>;
         };
     };
+};
+
+&sram0 {
+	status = "okay";
+};
+
+&adc {
+	status ="okay";
 };
