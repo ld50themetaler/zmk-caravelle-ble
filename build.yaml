@@ -2,7 +2,14 @@
 # zmkfirmware/zmk の build-user-config.yml が読み込むビルド定義ファイル
 
 include:
-  # シングルボード（非スプリット）版
+  # Split builds: peripheral (right) and central (left)
   - board: caravelle
-    shield: caravelle
-    artifact-name: caravelle_ble_single
+    shield: caravelle_right
+    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+    artifact-name: caravelle_right_peripheral
+
+  - board: caravelle
+    shield: caravelle_left
+    cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y
+    artifact-name: caravelle_left_central
+

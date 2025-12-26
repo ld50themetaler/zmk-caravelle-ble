@@ -51,10 +51,10 @@
                 &kp LSFT &kp SCLN &kp Q    &kp J   &kp K     &kp X     &kp LBRC
                 
                 // Filler for 4th row left (4 keys)
-                &kp TAB BSPC_ALT &mo LOWER SPC_SHF
+                &mo ADJUST BSPC_ALT &mo LOWER SPC_SHF
 
                 // Right Hand
-                &kp F   &kp G   &kp C     &kp R   &kp L     &kp SLASH
+                         &kp F  &kp G     &kp C   &kp R     &kp L     &kp SLASH
                 &kp RPAR &kp D  &kp H     &kp T   &kp N     &kp S     &kp MINUS
                 &kp RBRC &kp B  &kp M     &kp W   &kp V     &kp Z     &kp RSFT
 
