@@ -3,61 +3,73 @@
 / {
     physical_layout0: physical_layout0 {
         compatible = "zmk,physical-layout";
-        display-name = "Default Layout";
-				transform = <&default_transform>;
-				kscan = <&kscan0>;
-				
-        keys = 
-            /* Row 0 (Top) - Left to Right */
-              <&key_physical_attrs 100 100   0   0 0 0 0>
-            , <&key_physical_attrs 100 100 100   0 0 0 0>
-            , <&key_physical_attrs 100 100 200   0 0 0 0>
-            , <&key_physical_attrs 100 100 300   0 0 0 0>
-            , <&key_physical_attrs 100 100 400   0 0 0 0>
-            , <&key_physical_attrs 100 100 500   0 0 0 0>
-            , <&key_physical_attrs 100 100 700   0 0 0 0>
-            , <&key_physical_attrs 100 100 800   0 0 0 0>
-            , <&key_physical_attrs 100 100 900   0 0 0 0>
-            , <&key_physical_attrs 100 100 1000  0 0 0 0>
-            , <&key_physical_attrs 100 100 1100  0 0 0 0>
-            , <&key_physical_attrs 100 100 1200  0 0 0 0>
+        display-name = "Default Layout (Left+Right)";
+			transform = <&default_transform>;
+			kscan = <&kscan0>;
 
-            /* Row 1 (Home) - Left to Right */
-            , <&key_physical_attrs 100 100   0 100 0 0 0>
-            , <&key_physical_attrs 100 100 100 100 0 0 0>
-            , <&key_physical_attrs 100 100 200 100 0 0 0>
-            , <&key_physical_attrs 100 100 300 100 0 0 0>
-            , <&key_physical_attrs 100 100 400 100 0 0 0>
-            , <&key_physical_attrs 100 100 500 100 0 0 0>
-            , <&key_physical_attrs 100 100 700 100 0 0 0>
-            , <&key_physical_attrs 100 100 800 100 0 0 0>
-            , <&key_physical_attrs 100 100 900 100 0 0 0>
-            , <&key_physical_attrs 100 100 1000 100 0 0 0>
-            , <&key_physical_attrs 100 100 1100 100 0 0 0>
-            , <&key_physical_attrs 100 100 1200 100 0 0 0>
+        /* Revised layout: each half is 24 positions arranged as 3 rows (6 / 7 / 7) + 4 thumb keys
+         * Matches `caravelle.keymap` binding order: positions 0..23 = LEFT, 24..47 = RIGHT
+         */
+        keys =
+            /* LEFT: main grid - Row counts: 6 / 7 / 7  (positions 0..19) */
+            /* Row 0 (top) - positions 0..5 */
+            <&key_physical_attrs 120 120   0   0 0 0 0>,  /* 0 */
+            <&key_physical_attrs 120 120 120   0 0 0 0>,  /* 1 */
+            <&key_physical_attrs 120 120 240   0 0 0 0>,  /* 2 */
+            <&key_physical_attrs 120 120 360   0 0 0 0>,  /* 3 */
+            <&key_physical_attrs 120 120 480   0 0 0 0>,  /* 4 */
+            <&key_physical_attrs 120 120 600   0 0 0 0>,  /* 5 */
+            /* Row 1 (home/middle) - positions 6..12 (7 keys) */
+            <&key_physical_attrs 120 120   0 120 0 0 0>,  /* 6 */
+            <&key_physical_attrs 120 120 120 120 0 0 0>,  /* 7 */
+            <&key_physical_attrs 120 120 240 120 0 0 0>,  /* 8 */
+            <&key_physical_attrs 120 120 360 120 0 0 0>,  /* 9 */
+            <&key_physical_attrs 120 120 480 120 0 0 0>,  /*10 */
+            <&key_physical_attrs 120 120 600 120 0 0 0>,  /*11 */
+            <&key_physical_attrs 120 120 720 120 0 0 0>,  /*12 */
+            /* Row 2 (bottom) - positions 13..19 (7 keys) */
+            <&key_physical_attrs 120 120   0 240 0 0 0>,  /*13 */
+            <&key_physical_attrs 120 120 120 240 0 0 0>,  /*14 */
+            <&key_physical_attrs 120 120 240 240 0 0 0>,  /*15 */
+            <&key_physical_attrs 120 120 360 240 0 0 0>,  /*16 */
+            <&key_physical_attrs 120 120 480 240 0 0 0>,  /*17 */
+            <&key_physical_attrs 120 120 600 240 0 0 0>,  /*18 */
+            <&key_physical_attrs 120 120 720 240 0 0 0>,  /*19 */
 
-            /* Row 2 (Bottom) - Left to Right */
-            , <&key_physical_attrs 100 100   0 200 0 0 0>
-            , <&key_physical_attrs 100 100 100 200 0 0 0>
-            , <&key_physical_attrs 100 100 200 200 0 0 0>
-            , <&key_physical_attrs 100 100 300 200 0 0 0>
-            , <&key_physical_attrs 100 100 400 200 0 0 0>
-            , <&key_physical_attrs 100 100 500 200 0 0 0>
-            , <&key_physical_attrs 100 100 700 200 0 0 0>
-            , <&key_physical_attrs 100 100 800 200 0 0 0>
-            , <&key_physical_attrs 100 100 900 200 0 0 0>
-            , <&key_physical_attrs 100 100 1000 200 0 0 0>
-            , <&key_physical_attrs 100 100 1100 200 0 0 0>
-            , <&key_physical_attrs 100 100 1200 200 0 0 0>
+            /* LEFT thumb cluster (positions 20..23) - 4 keys to match keymap */
+            <&key_physical_attrs 160 120 160 360 0 0 0>,  /*20  Adjust */
+            <&key_physical_attrs 160 120 280 360 0 0 0>,  /*21  BSPC/Alt */
+            <&key_physical_attrs 160 120 400 360 0 0 0>,  /*22  Lower */
+            <&key_physical_attrs 200 120 320 420 0 0 0>,  /*23  Space/large thumb */
 
-            /* Row 3 (Thumb cluster) */
-            , <&key_physical_attrs 125 100 200 300 0 0 0>
-            , <&key_physical_attrs 100 100 335 320 5000 425 325>
-            , <&key_physical_attrs 100 100 460 360 13000 525 400>
-            , <&key_physical_attrs 150 100 540 380 65000 600 0>
-            , <&key_physical_attrs 150 100 700 380 65000 900 0>
-            , <&key_physical_attrs 100 100 870 360 13000 525 0>
-            , <&key_physical_attrs 100 100 1000 320 5000 1075 325>
-            ;
+            /* RIGHT: mirror of LEFT but offset in X (offset = +1200) positions 24..47 */
+            /* Row 0 (top) - positions 24..29 */
+            <&key_physical_attrs 120 120 1200 0 0 0 0>,  /*24 */
+            <&key_physical_attrs 120 120 1320 0 0 0 0>,  /*25 */
+            <&key_physical_attrs 120 120 1440 0 0 0 0>,  /*26 */
+            <&key_physical_attrs 120 120 1560 0 0 0 0>,  /*27 */
+            <&key_physical_attrs 120 120 1680 0 0 0 0>,  /*28 */
+            <&key_physical_attrs 120 120 1800 0 0 0 0>,  /*29 */
+            /* Row 1 (home/middle) - positions 30..36 (7 keys) */
+            <&key_physical_attrs 120 120 1200 120 0 0 0>,  /*30 */
+            <&key_physical_attrs 120 120 1320 120 0 0 0>,  /*31 */
+            <&key_physical_attrs 120 120 1440 120 0 0 0>,  /*32 */
+            <&key_physical_attrs 120 120 1560 120 0 0 0>,  /*33 */
+            <&key_physical_attrs 120 120 1680 120 0 0 0>,  /*34 */
+            <&key_physical_attrs 120 120 1800 120 0 0 0>,  /*35 */
+            <&key_physical_attrs 120 120 1920 120 0 0 0>,  /*36 */
+            /* Row 2 (bottom) - positions 37..43 (7 keys) */
+            <&key_physical_attrs 120 120 1200 240 0 0 0>,  /*37 */
+            <&key_physical_attrs 120 120 1320 240 0 0 0>,  /*38 */
+            <&key_physical_attrs 120 120 1440 240 0 0 0>,  /*39 */
+            <&key_physical_attrs 120 120 1560 240 0 0 0>,  /*40 */
+            <&key_physical_attrs 120 120 1680 240 0 0 0>,  /*41 */
+            <&key_physical_attrs 120 120 1800 240 0 0 0>,  /*42 */
+            <&key_physical_attrs 120 120 1920 240 0 0 0>,  /*43 */
+            /* RIGHT thumb cluster (positions 44..47) - 4 keys */
+            <&key_physical_attrs 160 120 1360 360 0 0 0>,  /*44  Enter/Alt */
+            <&key_physical_attrs 160 120 1480 360 0 0 0>,  /*45  Raise */
+            <&key_physical_attrs 160 120 1600 360 0 0 0>,  /*46  Tab */
+            <&key_physical_attrs 200 120 1560 420 0 0 0>;  /*47  Space/large thumb */
     };
 };
