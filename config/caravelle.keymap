@@ -11,10 +11,35 @@
 / {
     // ========== 1. カスタムビヘイビアの定義 ==========
 
-    // QMKのカスタムキーコード (process_record_user) に対応する
-    
+    // デフォルトのMod-Tap(&mt)の挙動を上書きし、QMK風の快適な設定に変更します
+    behaviors {
+        mt: mod_tap {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            
+            // --- ここからがカスタマイズ項目です ---
+
+            // タップとホールドを認識する時間。200msに設定。
+            tapping-term-ms = <200>;
+            
+            // 'tap-preferred'フレーバーを選択。
+            // これにより、高速でキーを連続入力（ローリング）した際に、
+            // ホールド（モディファイア）が誤爆するのを防ぎます。
+            // QMKの`IGNORE_MOD_TAP_INTERRUPT`に近い挙動です。
+            flavor = "tap-preferred"; 
+
+            // (オプション) この時間内の素早い連続タップは、強制的にタップとして扱います。
+            // これにより、スペースキーやエンターキーの連続タップがより確実になります。
+            quick-tap-ms = <150>;
+
+            // --- ここまでがカスタマイズ項目です ---
+
+            bindings = <&kp>, <&kp>;
+        };
+    };
+
     // Alt + ` マクロ (ALT_GRV) の定義
-    // ZMKでは sequence-macro を使用して複数のキーアクションを定義します。
+    // 日本語入力のオンオフで、ChromeでAltキーが暴発するための対策マクロ
     alt_grav_macro: alt_grav_macro {
         compatible = "zmk,behavior-macro";
         #binding-cells = <0>;
@@ -45,57 +70,41 @@
 
         default_layer {
             bindings = <
-                // Row 1 (6 keys)
-                ESC_GUI  &kp SQT   &kp COMMA &kp DOT &kp P     &kp Y                          &kp F     &kp G     &kp C     &kp R     &kp L     &kp SLASH
-                // Row 2 (7 keys)
-                TAB_CTL  &kp A     &kp O     &kp E   &kp U     &kp I   &kp LPAR     &kp RPAR  &kp D     &kp H     &kp T     &kp N     &kp S     &kp MINUS
-                // Row 3 (7 keys)
-                &kp LSFT &kp SCLN  &kp Q     &kp J   &kp K     &kp X   &kp LBRC     &kp RBRC  &kp B     &kp M     &kp W     &kp V     &kp Z     &kp RSFT
-                // Row 4 (4 keys)
-                         &mo ADJUST BSPC_ALT  &mo LOWER SPC_SHF                     ENT_CTL   &mo RAISE &kp TAB   &kp LALT
+                ESC_GUI  &kp SQT   &kp COMMA &kp DOT   &kp P     &kp Y                                    &kp F     &kp G     &kp C     &kp R     &kp L     &kp SLASH
+                TAB_CTL  &kp A     &kp O     &kp E     &kp U     &kp I       &kp LPAR           &kp RPAR  &kp D     &kp H     &kp T     &kp N     &kp S     &kp MINUS
+                &kp LSFT &kp SCLN  &kp Q     &kp J     &kp K     &kp X       &kp LBRC           &kp RBRC  &kp B     &kp M     &kp W     &kp V     &kp Z     &kp RSFT
+                                          &mo ADJUST   BSPC_ALT  &mo LOWER   SPC_SHF            ENT_CTL   &mo RAISE &kp TAB   &kp LALT
             >;
         };
 
         // レイヤー 1: _LOWER
         lower_layer {
             bindings = <
-                // Row 1 (6 keys)
-                _______  &kp F1  &kp F2    &kp F3    &kp F4    &kp F5                            &none     &kp HOME  &kp PGDN  &kp PGUP  &kp END   &trans
-                // Row 2 (7 keys)
-                _______  &kp F6  &kp F7    &kp F8    &kp F9    &kp F10  &mo ADJUST     _______   &alt_grav_macro &kp LEFT &kp DOWN &kp UP &kp RIGHT &trans
-                // Row 3 (7 keys)
-                _______  &kp F11 &kp F12   &kp PSCRN &kp SLCK  &kp INS  &trans         _______   &none     &none     &none     &none     &none     &trans
-                // Row 4 (4 keys)
-                                         _______ &lt LOWER DEL _______  _______        _______   _______   _______   _______
+                _______  &kp F1  &kp F2    &kp F3    &kp F4    &kp F5                             XXXXXXX         &kp HOME   &kp PGDN    &kp PGUP  &kp END     _______
+                _______  &kp F6  &kp F7    &kp F8    &kp F9    &kp F10  &mo ADJUST      _______   &alt_grav_macro &kp LEFT   &kp DOWN    &kp UP    &kp RIGHT   _______
+                _______  &kp F11 &kp F12   &kp PSCRN &kp SLCK  &kp INS  _______         _______   XXXXXXX         XXXXXXX    XXXXXXX     XXXXXXX   XXXXXXX     _______
+                                         _______ &lt LOWER DEL _______  _______         _______   _______         _______    _______
             >;
         };
 
         // レイヤー 2: _RAISE
         raise_layer {
             bindings = <
-                // Row 1 (6 keys)
-                _______  &kp N1   &kp N2    &kp N3    &kp N4    &kp N5                            &kp N6    &kp N7    &kp N8    &kp N9    &kp N0    &trans
-                // Row 2 (7 keys)
-                _______  &none    &none     &kp ESC   &none     &kp TAB  &trans         _______   &kp LBRC  &kp RBRC  &kp SLASH &kp EQUAL &kp MINUS &trans
-                // Row 3 (7 keys)
-                _______  &none    &none     &none     &none     &none    &trans         _______   &kp GRAVE &kp BSLH  &none     &none     &none     &trans
-                // Row 4 (4 keys)
-                                           _______  _______   _______   _______         _______   _______   _______   _______
+                _______  &kp N1     &kp N2      &kp N3      &kp N4    &kp N5                              &kp N6    &kp N7    &kp N8    &kp N9    &kp N0      _______
+                _______  XXXXXXX    XXXXXXX     &kp ESC     XXXXXXX   &kp TAB   _______         _______   &kp LBRC  &kp RBRC  &kp SLASH &kp EQUAL &kp MINUS   _______
+                _______  XXXXXXX    XXXXXXX     XXXXXXX     XXXXXXX   XXXXXXX   _______         _______   &kp GRAVE &kp BSLH  XXXXXXX   XXXXXXX   XXXXXXX     _______
+                                                _______     _______   _______   _______         _______   _______   _______   _______
             >;
         };
 
         // レイヤー 3: _ADJUST
         adjust_layer {
             bindings = <
-                // Bluetooth / Advertising / Bonds (QMK のカスタムキーコードに対応)
-                // Row 1 (6 keys)
-                _______  &bt BT_CLR &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                     &none     &none     &none     &none     &none     &none
-                // Row 2 (7 keys)   
-                _______  &bt BT_CLR &none        &none        &none        &none     &none        &none     &none     &none     &none     &none     &none     &none
-                // Row 3 (7 keys)   
-                _______  &bt BT_SEL 0 &none      &none        &sys_reset   &none     &none        &none     &none     &none     &none     &none     &none     &none
-                // Row 4 (4 keys)   
-                                              _______    _______      _______      _______        _______   _______   _______   _______
+                // Bluetooth / Advertising / Bonds
+                &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4    XXXXXXX                                     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX
+                _______        XXXXXXX        XXXXXXX        XXXXXXX        &bt BT_CLR_ALL  &bt BT_CLR     _______          XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX
+                &sys_reset     XXXXXXX        XXXXXXX        XXXXXXX        XXXXXXX         _______        XXXXXXX          XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX
+                                                             _______        _______         _______        _______          _______     _______     _______     _______
             >;
         };
     };
