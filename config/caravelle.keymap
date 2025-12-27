@@ -36,18 +36,18 @@
 
             bindings = <&kp>, <&kp>;
         };
-    };
 
-    // Alt + ` マクロ (ALT_GRV) の定義
-    // 日本語入力のオンオフで、ChromeでAltキーが暴発するための対策マクロ
-    alt_grav_macro: alt_grav_macro {
-        compatible = "zmk,behavior-macro";
-        #binding-cells = <0>;
-        bindings = <
-            &macro_press   &kp LALT
-            &macro_tap     &kp GRAVE  // KC_GRV に対応
-            &macro_release &kp LALT
-        >;
+        // Alt + ` マクロ (ALT_GRV) の定義
+        // 日本語入力のオンオフで、ChromeでAltキーが暴発するための対策マクロ
+        alt_grav_macro: alt_grav_macro {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings =
+                <&macro_press &kp LALT>
+                , <&macro_tap &kp GRAVE>
+                , <&macro_release &kp LALT>
+                ;
+        };
     };
 
     // Definitions moved to #define macros
@@ -91,7 +91,7 @@
         raise_layer {
             bindings = <
                 _______  &kp N1     &kp N2      &kp N3      &kp N4    &kp N5                              &kp N6    &kp N7    &kp N8    &kp N9    &kp N0      _______
-                _______  XXXXXXX    XXXXXXX     &kp ESC     XXXXXXX   &kp TAB   _______         _______   &kp LBRC  &kp RBRC  &kp SLASH &kp EQUAL &kp MINUS   _______
+                _______  XXXXXXX    XXXXXXX     &kp ESC     XXXXXXX   &kp TAB   _______         _______   &kp LBKT  &kp RBKT  &kp SLASH &kp EQUAL &kp MINUS   _______
                 _______  XXXXXXX    XXXXXXX     XXXXXXX     XXXXXXX   XXXXXXX   _______         _______   &kp GRAVE &kp BSLH  XXXXXXX   XXXXXXX   XXXXXXX     _______
                                                 _______     _______   _______   _______         _______   _______   _______   _______
             >;
@@ -101,7 +101,7 @@
         adjust_layer {
             bindings = <
                 // Bluetooth / Advertising / Bonds
-                &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4    XXXXXXX                                     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX
+                &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4    &bt BT_SEL 5                                XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX
                 _______        XXXXXXX        XXXXXXX        XXXXXXX        &bt BT_CLR_ALL  &bt BT_CLR     _______          XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX
                 &sys_reset     XXXXXXX        XXXXXXX        XXXXXXX        XXXXXXX         _______        XXXXXXX          XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX     XXXXXXX
                                                              _______        _______         _______        _______          _______     _______     _______     _______
