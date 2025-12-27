@@ -13,16 +13,16 @@
 		zephyr,flash = &flash0;
         zephyr,code-partition = &code_partition;
         zephyr,settings-partition = &storage_partition;
-        //zmk,battery = &vbatt;
+        zmk,battery = &vbatt;
         zmk,physical_layout = &physical_layout0;
 	};
 
-    // vbatt: vbatt {
-    //     compatible = "zmk,battery-voltage-divider";
-    //     io-channels = <&adc 2>; // TODO 正しいピンを設定
-    //     output-ohms = <2000000>; // TODO 正しい電圧を設定
-    //     full-ohms = <(2000000 + 806000)>;
-    // };
+    vbatt: vbatt {
+        compatible = "zmk,battery-voltage-divider";
+        io-channels = <&adc 3>;
+        output-ohms = <2000000>;
+        full-ohms = <(2000000 + 806000)>;
+    };
 };
 
 &gpio0 {
