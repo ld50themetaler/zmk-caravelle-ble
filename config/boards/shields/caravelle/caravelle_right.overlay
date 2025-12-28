@@ -13,6 +13,7 @@
         diode-direction = "row2col";
         debounce-press-ms = <10>;
         debounce-release-ms = <10>;
+        wakeup-source;
 
         /* Row Pin: P0.27 (QMK mapping) */
         row-gpios = <&gpio0 27 (GPIO_ACTIVE_LOW)>;

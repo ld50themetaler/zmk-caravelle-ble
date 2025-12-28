@@ -9,6 +9,7 @@
         diode-direction = "row2col";
         debounce-press-ms = <10>;
         debounce-release-ms = <10>;
+        wakeup-source;
 
         /* Row Pin: original left mapping (P0.0) */
         row-gpios = <&gpio0 0 (GPIO_ACTIVE_LOW)>;

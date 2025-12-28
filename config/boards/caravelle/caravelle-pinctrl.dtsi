@@ -1,3 +1,5 @@
+// TODO 使用していないので削除するか確認すること
+
 &pinctrl {
 	i2c0_default: i2c0_default {
 		group1 {
