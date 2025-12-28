@@ -19,7 +19,7 @@ jobs:
       config_path: config
       
       # ビルドマトリクスファイル (左右のボード・シールド定義)
-      build_matrix_path: config/build.yaml
+      build_matrix_path: build.yaml
       
       # 出力アーカイブ名
       archive_name: caravelle_ble
