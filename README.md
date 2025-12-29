@@ -68,6 +68,9 @@
 * 不要な設定の削除や、動作改善に関するチューニング
 * Readmeの導入手順の加筆
 * OpenOCDではなくもっと簡単な nRF Connect for Desktop での導入 (ST-Linkは必要ですが)
+* ZMK の Keymap Editor に対応  
+  https://nickcoutsos.github.io/keymap-editor
+  info.jsonを用意すればできるはず
 
 ## ソフトデバイスとブートローダの復旧
 * openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program ./zmk-workspace/bootloader/s132_nrf52_3.0.0_softdevice.hex verify" -c reset -c exit
