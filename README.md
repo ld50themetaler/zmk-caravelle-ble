@@ -1,4 +1,21 @@
 # Caravelle BLE用のZMKファームウェア
+2019年に発売された左右分割完全無線の傑作キーボード Caravelle BLEをより快適に使い続けるべく、ZMKへ移植しました  
+ただし、現状ではOTAでのファームウェアアップデートに対応しておらず、ST-LinkなどのSWDデバイスを使用して、有線で書き込む必要があります
+
+## 特徴
+* ZMK Studioによるリアルタイムのキーマップ編集
+* GitHub Actionsによるオンラインビルド
+  * QMKのビルド環境は構築難易度がやや高かったので、簡単になりました
+* 安定＆低遅延な使用感
+* 複数デバイス間のBluetooth接続先のスムーズな切り替え
+
+## 未対応機能
+* バッテリー残量表示
+  * 一次電池＆USB接続がないため、既存のバッテリー残量ライブラリが使えませんでした
+  * ライブラリをフォークして改造するなどで対応ができそうではあります
+* OTAによるファームウェアアップデート
+  * Caravelle BLEの純正のブートローダの仕様がはっきりわからないため、対応が難航しています
+  * 理論的には可能ではあるはずですが…
 
 ## ざっくりとした使い方 (人柱向け
 * 想定環境 : Windows11 + WSL(Ubuntu) + Devcontainer
@@ -14,25 +31,28 @@
   元に戻すにはブートローダの復旧などが必要です。意味が分からない方は本FWを使用しないでください。
 
 ## 手順
-1. zmk-workspaceの手順で開発コンテナを使用して、zmkのローカルビルドを整える
-   https://t.co/TKqf0q6Pdm
-2. config/zmk-caravelle-ble として zmk-caravelle-ble リポジトリを git clone
-3. $ just init ./config/zmk-caravelle-ble を実行
-4. $ just clean && just build caravelle でビルド
-5. firmwareディレクトリに以下のファイルが出力される  
-   caravelle_left_central.bin  
-   caravelle_right_peripheral.bin
-7. 以下を参考にして openocd 環境を構築  
+1. ビルド環境の作成  
+   GitHub Actionsでオンラインビルドする場合は不要です
+   1. zmk-workspaceの手順で開発コンテナを使用して、zmkのローカルビルドを整える  
+     https://t.co/TKqf0q6Pdm  
+   1. config/zmk-caravelle-ble として zmk-caravelle-ble リポジトリを git clone
+   1. $ just init ./config/zmk-caravelle-ble を実行
+   1. $ just clean && just build caravelle でビルド
+   1. firmwareディレクトリに以下のファイルが出力される  
+      caravelle_left_central.bin  
+      caravelle_right_peripheral.bin
+1. 以下を参考にして openocd 環境を構築  
    https://nahitafu.cocolog-nifty.com/nahitafu/2024/01/post-9784e8.html
-8. ST-Linkを左手のCaravelle BLEのPCBのシルク印刷に従って接続
-9. WSLのUbuntuで以下のコマンドを実行して、PCBと接続できていることを確認(Ctrl+Cで終了できます  
+   ST-Linkを使用してファームウェアを書き込めれば、OpenOCD以外のツールでもかまいません
+1. ST-Linkを左手のCaravelle BLEのPCBのシルク印刷に従って接続
+1. WSLのUbuntuで以下のコマンドを実行して、PCBと接続できていることを確認(Ctrl+Cで終了できます  
    $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg
-10. 以下のコマンドで左手分を書き込み  
+1. 以下のコマンドで左手分を書き込み  
    $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; nrf5 mass_erase; program ./firmware/caravelle_left_central.bin 0x0 verify reset; exit"
-11. 同様に右手のPCBにST-Linkを接続して、以下のコマンドで右手分を書き込み  
+1. 同様に右手のPCBにST-Linkを接続して、以下のコマンドで右手分を書き込み  
    $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; nrf5 mass_erase; program ./firmware/caravelle_right_peripheral.bin 0x0 verify reset; exit"
-12. ホスト側のBluetooth情報をリセットして、"Caravelle "という名前で検出されるので接続する
-13. ZMK Studioを使用する場合は、Web版はUSB接続しか使えないため、Bluetooth接続に対応したデスクトップ版を使用してください
+1. ホスト側のBluetooth情報をリセットして、"Caravelle "という名前で検出されるので接続する
+1. ZMK Studioを使用する場合は、Web版はUSB接続しか使えないため、Bluetooth接続に対応したデスクトップ版を使用してください
 
 ## 補足
 * ST-Linkの種類によっては付属ケーブルがメス-メスになっているようです。その時は自キーを作ってるとよく余るピンヘッダを使うとPCBに接続しやすいです
