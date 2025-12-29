@@ -35,3 +35,9 @@
 * ST-Linkの種類によっては付属ケーブルがメス-メスになっているようです。その時は自キーを作ってるとよく余るピンヘッダを使うとPCBに接続しやすいです
 * キーマップは以下になっています。デフォルトレイヤーがDvorakなので各自でお好みの配列に変更してお使いください  
   https://github.com/ld50themetaler/zmk-caravelle-ble/blob/main/config/caravelle.keymap
+
+## ソフトデバイスとブートローダの復旧
+openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program ./zmk-workspace/bootloader/s132_nrf52_3.0.0_softdevice.hex verify" -c reset -c exit
+
+openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; program ./zmk-workspace/caravelle_bootloader/caravelle_ble-bootloader.hex verify reset; exit"
+
