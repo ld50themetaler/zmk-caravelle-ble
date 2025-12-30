@@ -12,6 +12,7 @@
     // ========== 1. カスタムビヘイビアの定義 ==========
 
     // デフォルトのMod-Tap(&mt)の挙動を上書きし、QMK風の快適な設定に変更します
+    /*
     behaviors {
         mt: mod_tap {
             compatible = "zmk,behavior-hold-tap";
@@ -49,6 +50,7 @@
                 ;
         };
     };
+    */
 
     // Definitions moved to #define macros
     
@@ -70,9 +72,9 @@
 
         default_layer {
             bindings = <
-                ESC_GUI  &kp SQT   &kp COMMA &kp DOT   &kp P     &kp Y                                    &kp F     &kp G     &kp C     &kp R     &kp L     &kp SLASH
-                TAB_CTL  &kp A     &kp O     &kp E     &kp U     &kp I       &kp LPAR           &kp RPAR  &kp D     &kp H     &kp T     &kp N     &kp S     &kp MINUS
-                &kp LSFT &kp SCLN  &kp Q     &kp J     &kp K     &kp X       &kp LBRC           &kp RBRC  &kp B     &kp M     &kp W     &kp V     &kp Z     &kp RSFT
+                ESC_GUI  &kp Q     &kp W     &kp E     &kp R     &kp T                                    &kp Y     &kp U     &kp I     &kp O     &kp P     &kp LBKT
+                TAB_CTL  &kp A     &kp S     &kp D     &kp F     &kp G       &kp LPAR           &kp RPAR  &kp H     &kp J     &kp K     &kp L     &kp SCLN  &kp SQT
+                &kp LSFT &kp Z     &kp X     &kp C     &kp V     &kp B       &kp LBRC           &kp RBRC  &kp N     &kp M     &kp COMMA &kp DOT   &kp SLASH &kp RSFT
                                           &mo ADJUST   BSPC_ALT  &mo LOWER   SPC_SHF            ENT_CTL   &mo RAISE &kp TAB   &kp LALT
             >;
         };
@@ -81,7 +83,7 @@
         lower_layer {
             bindings = <
                 _______  &kp F1  &kp F2    &kp F3    &kp F4    &kp F5                             XXXXXXX         &kp HOME   &kp PGDN    &kp PGUP  &kp END     _______
-                _______  &kp F6  &kp F7    &kp F8    &kp F9    &kp F10  &mo ADJUST      _______   &alt_grav_macro &kp LEFT   &kp DOWN    &kp UP    &kp RIGHT   _______
+                _______  &kp F6  &kp F7    &kp F8    &kp F9    &kp F10  &mo ADJUST      _______   XXXXXXX         &kp LEFT   &kp DOWN    &kp UP    &kp RIGHT   _______
                 _______  &kp F11 &kp F12   &kp PSCRN &kp SLCK  &kp INS  _______         _______   XXXXXXX         XXXXXXX    XXXXXXX     XXXXXXX   XXXXXXX     _______
                                          _______ &lt LOWER DEL _______  _______         _______   _______         _______    _______
             >;
