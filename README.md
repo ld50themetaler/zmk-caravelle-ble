@@ -42,8 +42,8 @@
       caravelle_left_central.bin  
       caravelle_right_peripheral.bin
 1. 以下を参考にして openocd 環境を構築  
+   ST-Linkを使用してファームウェアを書き込めれば、OpenOCD以外のツールでもかまいません  
    https://nahitafu.cocolog-nifty.com/nahitafu/2024/01/post-9784e8.html
-   ST-Linkを使用してファームウェアを書き込めれば、OpenOCD以外のツールでもかまいません
 1. ST-Linkを左手のCaravelle BLEのPCBのシルク印刷に従って接続
 1. WSLのUbuntuで以下のコマンドを実行して、PCBと接続できていることを確認(Ctrl+Cで終了できます  
    $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg
