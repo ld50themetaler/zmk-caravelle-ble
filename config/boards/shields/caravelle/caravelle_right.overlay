@@ -11,8 +11,6 @@
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN_RIGHT";
         diode-direction = "row2col";
-        debounce-press-ms = <10>;
-        debounce-release-ms = <10>;
         wakeup-source;
 
         /* Row Pin: P0.27 (QMK mapping) */

@@ -13,8 +13,13 @@ manifest:
       remote: zmkfirmware
       revision: main
       import: app/west.yml
+    - name: zmk-feature-non-lipo-battery-management
+      remote: ld50
+      revision: main
 
   # リモートリポジトリの定義
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
+    - name: ld50
+      url-base: https://github.com/ld50themetaler

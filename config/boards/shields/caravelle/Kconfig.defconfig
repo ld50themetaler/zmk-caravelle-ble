@@ -1,17 +1,91 @@
-if SHIELD_CARAVELLE_LEFT
+if SHIELD_CARAVELLE_LEFT || SHIELD_CARAVELLE_RIGHT
+
+config ZMK_BLE
+    default y
+
+config GPIO
+    default y
 
 config ZMK_SPLIT
     default y
 
-config ZMK_SPLIT_ROLE_CENTRAL
+config ZMK_SLEEP
+    default y
+
+config ZMK_IDLE_TIMEOUT
+    default 30000
+
+config SETTINGS
+    default y
+
+config NVS
+    default y
+
+config SETTINGS_NVS_SECTOR_COUNT
+    default 4
+
+config SETTINGS_RUNTIME
+    default y
+
+config BT_SETTINGS
+    default y
+
+config FLASH
+    default y
+
+config FLASH_PAGE_LAYOUT
+    default y
+
+config FLASH_MAP
+    default y
+
+config SOC_FLASH_NRF
+    default y
+
+config ZMK_BATTERY_REPORTING
+    default n
+
+# 非LiPo電池管理を有効化
+config ZMK_NON_LIPO_BATTERY_MANAGEMENT
+    default y
+
+# 下限電圧 (0%)
+config ZMK_NON_LIPO_MIN_MV
+    default 2200
+
+# 上限電圧 (100%)
+config ZMK_NON_LIPO_MAX_MV
+    default 3300
+
+# シャットダウン電圧
+config ZMK_NON_LIPO_LOW_MV
+    default 2000
+
+config ZMK_NON_LIPO_ADV_SLEEP_TIMEOUT
+    default 60000
+
+config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_PROXY
+    default y
+
+config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
     default y
 
 endif
 
-if SHIELD_CARAVELLE_RIGHT
+if SHIELD_CARAVELLE_LEFT
 
-config ZMK_SPLIT
+config ZMK_SPLIT_ROLE_CENTRAL
     default y
+
+config ZMK_STUDIO
+    default n
+
+config ZMK_STUDIO_LOCKING
+    default n
+
+endif
+
+if SHIELD_CARAVELLE_RIGHT
 
 config ZMK_SPLIT_ROLE_CENTRAL
     default n
