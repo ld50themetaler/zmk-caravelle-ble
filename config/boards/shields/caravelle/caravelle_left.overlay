@@ -8,7 +8,9 @@
         label = "KSCAN_LEFT";
         diode-direction = "row2col";
         wakeup-source;
-
+        debounce-press-ms = <10>;
+        debounce-release-ms = <10>;
+        
         /* Row Pin: original left mapping (P0.0) */
         row-gpios = <&gpio0 0 (GPIO_ACTIVE_LOW)>;
 

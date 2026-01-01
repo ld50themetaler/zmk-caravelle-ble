@@ -43,7 +43,7 @@ config SOC_FLASH_NRF
     default y
 
 config ZMK_BATTERY_REPORTING
-    default n
+    default y
 
 # 非LiPo電池管理を有効化
 config ZMK_NON_LIPO_BATTERY_MANAGEMENT
@@ -64,12 +64,6 @@ config ZMK_NON_LIPO_LOW_MV
 config ZMK_NON_LIPO_ADV_SLEEP_TIMEOUT
     default 60000
 
-config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_PROXY
-    default y
-
-config ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING
-    default y
-
 endif
 
 if SHIELD_CARAVELLE_LEFT
@@ -78,9 +72,12 @@ config ZMK_SPLIT_ROLE_CENTRAL
     default y
 
 config ZMK_STUDIO
-    default n
+    default y
 
 config ZMK_STUDIO_LOCKING
+    default n
+
+config BT_PRIVACY
     default n
 
 endif
@@ -89,5 +86,8 @@ if SHIELD_CARAVELLE_RIGHT
 
 config ZMK_SPLIT_ROLE_CENTRAL
     default n
+
+config BT_PRIVACY
+    default y
 
 endif
