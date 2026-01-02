@@ -60,6 +60,16 @@
 
         default_layer {
             bindings = <
+
+// Qwerty
+/*
+&mt LGUI ESC    &kp Q          &kp W  &kp E                 &kp R            &kp T  &kp Y     &kp U     &kp I  &kp O  &kp P      &kp LBKT
+&mt LCTRL TAB   &kp A          &kp S  &kp D                 &kp F            &kp G  &kp LPAR  &kp RPAR  &kp H  &kp J  &kp K      &kp L     &kp MINUS  &kp SQT
+&kp LEFT_SHIFT  &kp Z          &kp X  &kp C                 &kp V            &kp B  &kp LBRC  &kp RBRC  &kp N  &kp M  &kp COMMA  &kp DOT   &kp SLASH  &kp RSHIFT
+&mo 3           &mt LALT BSPC  &mo 1  &mt LEFT_SHIFT SPACE  &mt RCTRL ENTER  &mo 2  &kp TAB   &kp LALT
+*/
+
+// Dvorak
 &mt LGUI ESC   &kp SQT        &kp COMMA  &kp DOT           &kp P            &kp Y  &kp F         &kp G     &kp C  &kp R  &kp L  &kp SLASH
 &mt LCTRL TAB  &kp A          &kp O      &kp E             &kp U            &kp I  &kp LPAR      &kp RPAR  &kp D  &kp H  &kp T  &kp N      &kp S  &kp MINUS
 &kp LSHFT      &kp SEMICOLON  &kp Q      &kp J             &kp K            &kp X  &kp LBRC      &kp RBRC  &kp B  &kp M  &kp W  &kp V      &kp Z  &kp RSHIFT
