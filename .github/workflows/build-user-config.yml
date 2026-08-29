@@ -128,16 +128,29 @@ jobs:
         working-directory: ${{ env.base_dir }}
         shell: bash
         run: |
+          MODULE1="${{ env.base_dir }}/modules/zmk-feature-non-lipo-battery-management"
+          if [ ! -d "$MODULE1" ]; then
+            MODULE1="${{ env.base_dir }}/zmk-feature-non-lipo-battery-management"
+          fi
+
+          MODULE2="${{ env.base_dir }}/modules/prospector-zmk-module"
+          if [ ! -d "$MODULE2" ]; then
+            MODULE2="${{ env.base_dir }}/prospector-zmk-module"
+          fi
+
           cat << EOF > "${{ env.build_dir }}/extra_modules.cmake"
-          set(ZMK_EXTRA_MODULES "${{ env.base_dir }}/zmk-feature-non-lipo-battery-management;${{ env.base_dir }}/modules/prospector-zmk-module" CACHE STRING "" FORCE)
+          set(ZMK_EXTRA_MODULES "${MODULE1};${MODULE2}" CACHE STRING "" FORCE)
           EOF
 
+          echo "=== extra_modules.cmake ==="
+          cat "${{ env.build_dir }}/extra_modules.cmake"
 
           west build -s zmk/app -d "${{ env.build_dir }}" -b "${{ matrix.board }}" ${{ env.extra_west_args }} -- \
             -DZMK_CONFIG="${{ env.base_dir }}/${{ inputs.config_path }}" \
             -C "${{ env.build_dir }}/extra_modules.cmake" \
             ${{ env.extra_cmake_args }} \
             ${{ matrix.cmake-args }}
+
 
 
 
