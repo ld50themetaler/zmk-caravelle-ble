@@ -128,11 +128,17 @@ jobs:
         working-directory: ${{ env.base_dir }}
         shell: bash
         run: |
+          set -o pipefail
           west build -s zmk/app -d "${{ env.build_dir }}" -b "${{ matrix.board }}" ${{ env.extra_west_args }} -- \
             -DZMK_CONFIG="${{ env.base_dir }}/${{ inputs.config_path }}" \
             -DZMK_EXTRA_MODULES="${{ env.ZEPHYR_EXTRA_MODULES }}" \
             ${{ env.extra_cmake_args }} \
-            ${{ matrix.cmake-args }}
+            ${{ matrix.cmake-args }} 2>&1 | tee /tmp/build_log.txt || {
+              echo "=== WEST BUILD FAILED: LAST 100 LINES OF LOG ==="
+              tail -n 100 /tmp/build_log.txt
+              exit 1
+            }
+
 
 
       - name: ${{ env.display_name }} Kconfig file
@@ -183,6 +189,14 @@ jobs:
         with:
           name: artifact-${{ env.artifact_name }}
           path: ${{ env.build_dir }}/artifacts
+
+      - name: Upload Build Log on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ env.artifact_name }}
+          path: /tmp/build_log.txt
+
 
 
   merge:
