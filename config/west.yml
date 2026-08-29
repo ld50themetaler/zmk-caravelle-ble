@@ -16,6 +16,8 @@ manifest:
     - name: zmk-feature-non-lipo-battery-management
       remote: ld50
       revision: main
+      path: modules/zmk-feature-non-lipo-battery-management
+
     - name: prospector-zmk-module
       remote: prospector
       revision: v2.2b
