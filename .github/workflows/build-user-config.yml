@@ -128,9 +128,10 @@ jobs:
         working-directory: ${{ env.base_dir }}
         shell: bash
         run: |
-          cat << 'EOF' > "${{ env.build_dir }}/extra_modules.cmake"
+          cat << EOF > "${{ env.build_dir }}/extra_modules.cmake"
           set(ZMK_EXTRA_MODULES "${{ env.base_dir }}/zmk-feature-non-lipo-battery-management;${{ env.base_dir }}/modules/prospector-zmk-module" CACHE STRING "" FORCE)
           EOF
+
 
           west build -s zmk/app -d "${{ env.build_dir }}" -b "${{ matrix.board }}" ${{ env.extra_west_args }} -- \
             -DZMK_CONFIG="${{ env.base_dir }}/${{ inputs.config_path }}" \
