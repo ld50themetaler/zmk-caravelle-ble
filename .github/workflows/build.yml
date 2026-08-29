@@ -44,21 +44,26 @@ jobs:
           west update --fetch-opt=--filter=tree:0
           west zephyr-export
 
+      - name: Ensure External Modules
+        run: |
+          mkdir -p modules
+          if [ ! -d modules/zmk-feature-non-lipo-battery-management ]; then
+            git clone https://github.com/ld50themetaler/zmk-feature-non-lipo-battery-management modules/zmk-feature-non-lipo-battery-management
+          fi
+          if [ ! -d modules/prospector-zmk-module ]; then
+            git clone -b v2.2b https://github.com/carrefourtomato/prospector-zmk-module modules/prospector-zmk-module
+          fi
+
       - name: Setup CMake Cache
         run: |
           mkdir -p build/left build/right
-          MODULE1=$(find "${PWD}" -maxdepth 4 -type d -name "zmk-feature-non-lipo-battery-management" | head -n 1)
-          MODULE2=$(find "${PWD}" -maxdepth 4 -type d -name "prospector-zmk-module" | head -n 1)
-
-          echo "Found MODULE1: ${MODULE1}"
-          echo "Found MODULE2: ${MODULE2}"
-
           cat << EOF > /tmp/extra_modules.cmake
-          set(ZMK_EXTRA_MODULES "${MODULE1};${MODULE2}" CACHE STRING "" FORCE)
+          set(ZMK_EXTRA_MODULES "${PWD}/modules/zmk-feature-non-lipo-battery-management;${PWD}/modules/prospector-zmk-module" CACHE STRING "" FORCE)
           EOF
 
           echo "=== /tmp/extra_modules.cmake ==="
           cat /tmp/extra_modules.cmake
+
 
 
 
