@@ -80,8 +80,12 @@ jobs:
           echo "zephyr_version=${ZEPHYR_VERSION}" >> $GITHUB_ENV
           echo "extra_west_args=${extra_west_args}" >> $GITHUB_ENV
           echo "extra_cmake_args=${shield:+-DSHIELD=\"$shield\"}${zmk_load_arg}" >> $GITHUB_ENV
+          echo "ZEPHYR_EXTRA_MODULES=${base_dir}/zmk-feature-non-lipo-battery-management;${base_dir}/modules/prospector-zmk-module" >> $GITHUB_ENV
+          echo "ZMK_EXTRA_MODULES=${base_dir}/zmk-feature-non-lipo-battery-management;${base_dir}/modules/prospector-zmk-module" >> $GITHUB_ENV
           echo "display_name=${shield:+$shield - }${board}" >> $GITHUB_ENV
           echo "artifact_name=${artifact_name:-${shield:+$shield-}${board//\//_}-zmk}" >> $GITHUB_ENV
+
+
 
       - name: Copy config files to isolated temporary directory
         run: |
