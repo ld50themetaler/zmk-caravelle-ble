@@ -147,9 +147,14 @@ jobs:
 
           west build -s zmk/app -d "${{ env.build_dir }}" -b "${{ matrix.board }}" ${{ env.extra_west_args }} -- \
             -DZMK_CONFIG="${{ env.base_dir }}/${{ inputs.config_path }}" \
+            -DSHIELD="${{ matrix.shield }}" \
             -C "${{ env.build_dir }}/extra_modules.cmake" \
-            ${{ env.extra_cmake_args }} \
-            ${{ matrix.cmake-args }}
+            ${{ matrix.cmake-args }} 2>&1 | tee /tmp/build_log.txt || {
+              echo "=== WEST BUILD FAILED: LAST 80 LINES ==="
+              tail -n 80 /tmp/build_log.txt
+              exit 1
+            }
+
 
 
 
