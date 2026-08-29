@@ -128,15 +128,12 @@ jobs:
         working-directory: ${{ env.base_dir }}
         shell: bash
         run: |
-          MODULE1="${{ env.base_dir }}/modules/zmk-feature-non-lipo-battery-management"
-          if [ ! -d "$MODULE1" ]; then
-            MODULE1="${{ env.base_dir }}/zmk-feature-non-lipo-battery-management"
-          fi
+          set -o pipefail
+          MODULE1=$(find "${{ env.base_dir }}" -maxdepth 3 -type d -name "zmk-feature-non-lipo-battery-management" | head -n 1)
+          MODULE2=$(find "${{ env.base_dir }}" -maxdepth 3 -type d -name "prospector-zmk-module" | head -n 1)
 
-          MODULE2="${{ env.base_dir }}/modules/prospector-zmk-module"
-          if [ ! -d "$MODULE2" ]; then
-            MODULE2="${{ env.base_dir }}/prospector-zmk-module"
-          fi
+          echo "Found MODULE1: ${MODULE1}"
+          echo "Found MODULE2: ${MODULE2}"
 
           cat << EOF > "${{ env.build_dir }}/extra_modules.cmake"
           set(ZMK_EXTRA_MODULES "${MODULE1};${MODULE2}" CACHE STRING "" FORCE)
@@ -149,11 +146,16 @@ jobs:
             -DZMK_CONFIG="${{ env.base_dir }}/${{ inputs.config_path }}" \
             -DSHIELD="${{ matrix.shield }}" \
             -C "${{ env.build_dir }}/extra_modules.cmake" \
-            ${{ matrix.cmake-args }} 2>&1 | tee /tmp/build_log.txt || {
-              echo "=== WEST BUILD FAILED: LAST 80 LINES ==="
-              tail -n 80 /tmp/build_log.txt
-              exit 1
-            }
+            ${{ matrix.cmake-args }} 2>&1 | tee /tmp/build_log.txt
+
+      - name: Output Build Log on Failure
+        if: failure()
+        run: |
+          echo "### West Build Failure Log (${{ env.display_name }})" >> $GITHUB_STEP_SUMMARY
+          echo '```text' >> $GITHUB_STEP_SUMMARY
+          tail -n 100 /tmp/build_log.txt >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
 
 
 
