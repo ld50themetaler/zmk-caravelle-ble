@@ -151,10 +151,16 @@ jobs:
       - name: Output Build Log on Failure
         if: failure()
         run: |
-          echo "### West Build Failure Log (${{ env.display_name }})" >> $GITHUB_STEP_SUMMARY
-          echo '```text' >> $GITHUB_STEP_SUMMARY
-          tail -n 100 /tmp/build_log.txt >> $GITHUB_STEP_SUMMARY || true
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "=== WEST BUILD FAILURE LOG ==="
+          tail -n 100 /tmp/build_log.txt || true
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B "debug-log-${{ env.artifact_name }}"
+          cp /tmp/build_log.txt "./build_error_${{ env.artifact_name }}.log"
+          git add "./build_error_${{ env.artifact_name }}.log"
+          git commit -m "debug: build error log for ${{ env.artifact_name }}"
+          git push -f origin "debug-log-${{ env.artifact_name }}" || true
+
 
 
 
