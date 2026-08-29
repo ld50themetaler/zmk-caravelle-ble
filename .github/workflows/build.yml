@@ -29,9 +29,9 @@ jobs:
             zephyr/
             bootloader/
             zmk/
-          key: ${{ runner.os }}-zmk-${{ hashFiles('config/west.yml') }}
+          key: ${{ runner.os }}-zmk-v2-${{ hashFiles('config/west.yml') }}
           restore-keys: |
-            ${{ runner.os }}-zmk-
+            ${{ runner.os }}-zmk-v2-
 
       - name: West Init
         run: |
@@ -47,11 +47,19 @@ jobs:
       - name: Setup CMake Cache
         run: |
           mkdir -p build/left build/right
+          MODULE1=$(find "${PWD}" -maxdepth 4 -type d -name "zmk-feature-non-lipo-battery-management" | head -n 1)
+          MODULE2=$(find "${PWD}" -maxdepth 4 -type d -name "prospector-zmk-module" | head -n 1)
+
+          echo "Found MODULE1: ${MODULE1}"
+          echo "Found MODULE2: ${MODULE2}"
+
           cat << EOF > /tmp/extra_modules.cmake
-          set(ZMK_EXTRA_MODULES "${PWD}/modules/zmk-feature-non-lipo-battery-management;${PWD}/modules/prospector-zmk-module" CACHE STRING "" FORCE)
+          set(ZMK_EXTRA_MODULES "${MODULE1};${MODULE2}" CACHE STRING "" FORCE)
           EOF
+
           echo "=== /tmp/extra_modules.cmake ==="
           cat /tmp/extra_modules.cmake
+
 
 
       - name: Build Left (Central)
