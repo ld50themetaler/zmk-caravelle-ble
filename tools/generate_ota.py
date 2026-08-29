@@ -93,16 +93,21 @@ def generate_ota_pure_python(bin_path, key_path, output_zip_path, sd_req=0x8C, h
 
 def main():
     parser = argparse.ArgumentParser(description='Generate Nordic Secure DFU OTA package for Caravelle BLE')
-    parser.add_argument('bin_file', help='Path to compiled zmk.bin file')
-    parser.add_argument('-o', '--output', help='Output .zip path', default=None)
+    parser.add_argument('bin_file', nargs='?', help='Path to compiled zmk.bin file', default=None)
+    parser.add_argument('--bin', dest='opt_bin', help='Path to compiled zmk.bin file', default=None)
+    parser.add_argument('-o', '--output', '--out', dest='output', help='Output .zip path', default=None)
     parser.add_argument('-k', '--key', help='Path to private_key.pem', default=None)
     parser.add_argument('--sd-req', help='SoftDevice req ID (hex)', default='0x8C')
     parser.add_argument('--hw-version', help='Hardware version', type=int, default=0)
+    parser.add_argument('--app-version', help='Application version', type=int, default=1)
+    args, unknown = parser.parse_known_args()
 
-    args = parser.parse_args()
+    bin_path = args.bin_file or args.opt_bin
+    if not bin_path:
+        parser.error("bin_file or --bin is required")
 
-    if not os.path.isfile(args.bin_file):
-        print('Error: Input binary %s not found.' % args.bin_file)
+    if not os.path.isfile(bin_path):
+        print('Error: Input binary %s not found.' % bin_path)
         sys.exit(1)
 
     default_key = os.path.join(os.path.dirname(__file__), '..', 'config', 'keys', 'private_key.pem')
@@ -114,7 +119,7 @@ def main():
 
     out_zip = args.output
     if not out_zip:
-        base = os.path.splitext(args.bin_file)[0]
+        base = os.path.splitext(bin_path)[0]
         out_zip = '%s_ota.zip' % base
 
     sd_req_val = int(args.sd_req, 16) if args.sd_req.startswith('0x') else int(args.sd_req)
@@ -127,7 +132,7 @@ def main():
             '--sd-req', hex(sd_req_val),
             '--debug-mode',
             '--key-file', key_path,
-            '--application', args.bin_file,
+            '--application', bin_path,
             out_zip
         ]
         res = subprocess.run(cmd)
@@ -135,7 +140,8 @@ def main():
             print('Successfully generated OTA package via nrfutil: %s' % out_zip)
             sys.exit(0)
 
-    success = generate_ota_pure_python(args.bin_file, key_path, out_zip, sd_req=sd_req_val, hw_version=args.hw_version)
+    success = generate_ota_pure_python(bin_path, key_path, out_zip, sd_req=sd_req_val, hw_version=args.hw_version)
+
     if not success:
         sys.exit(1)
 
