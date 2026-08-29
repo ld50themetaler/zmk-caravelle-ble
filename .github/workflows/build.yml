@@ -78,13 +78,14 @@ jobs:
 
       - name: Generate Nordic DFU OTA Packages
         run: |
-          pip3 install cryptography
+          apt-get update -qq && apt-get install -y -qq python3-cryptography
           mkdir -p artifacts
 
           cp build/left/zephyr/zmk.hex artifacts/caravelle_left_central.hex
           cp build/left/zephyr/zmk.bin artifacts/caravelle_left_central.bin
           cp build/right/zephyr/zmk.hex artifacts/caravelle_right_peripheral.hex
           cp build/right/zephyr/zmk.bin artifacts/caravelle_right_peripheral.bin
+
 
           python3 tools/generate_ota.py \
             --bin artifacts/caravelle_left_central.bin \
