@@ -47,9 +47,12 @@ jobs:
       - name: Setup CMake Cache
         run: |
           mkdir -p build/left build/right
-          cat << 'EOF' > /tmp/extra_modules.cmake
-          set(ZMK_EXTRA_MODULES "$ENV{PWD}/modules/zmk-feature-non-lipo-battery-management;$ENV{PWD}/modules/prospector-zmk-module" CACHE STRING "" FORCE)
+          cat << EOF > /tmp/extra_modules.cmake
+          set(ZMK_EXTRA_MODULES "${PWD}/modules/zmk-feature-non-lipo-battery-management;${PWD}/modules/prospector-zmk-module" CACHE STRING "" FORCE)
           EOF
+          echo "=== /tmp/extra_modules.cmake ==="
+          cat /tmp/extra_modules.cmake
+
 
       - name: Build Left (Central)
         run: |
