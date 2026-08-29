@@ -128,16 +128,16 @@ jobs:
         working-directory: ${{ env.base_dir }}
         shell: bash
         run: |
-          set -o pipefail
+          cat << 'EOF' > "${{ env.build_dir }}/extra_modules.cmake"
+          set(ZMK_EXTRA_MODULES "${{ env.base_dir }}/zmk-feature-non-lipo-battery-management;${{ env.base_dir }}/modules/prospector-zmk-module" CACHE STRING "" FORCE)
+          EOF
+
           west build -s zmk/app -d "${{ env.build_dir }}" -b "${{ matrix.board }}" ${{ env.extra_west_args }} -- \
             -DZMK_CONFIG="${{ env.base_dir }}/${{ inputs.config_path }}" \
-            -DZMK_EXTRA_MODULES="${{ env.ZEPHYR_EXTRA_MODULES }}" \
+            -C "${{ env.build_dir }}/extra_modules.cmake" \
             ${{ env.extra_cmake_args }} \
-            ${{ matrix.cmake-args }} 2>&1 | tee /tmp/build_log.txt || {
-              echo "=== WEST BUILD FAILED: LAST 100 LINES OF LOG ==="
-              tail -n 100 /tmp/build_log.txt
-              exit 1
-            }
+            ${{ matrix.cmake-args }}
+
 
 
 
