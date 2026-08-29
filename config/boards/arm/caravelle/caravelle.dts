@@ -37,19 +37,28 @@
         #address-cells = <1>;
         #size-cells = <1>;
 
-        /* 0x00000 から 0x7a000 (488KB) をコード領域に使用 */
-        code_partition: partition@0 {
+        /* 0x00000 - 0x1F000 (124KB): SoftDevice S132 v3.0 */
+
+        /* 0x1F000 - 0x71000 (328KB): ZMK Application */
+        code_partition: partition@1f000 {
             label = "code_partition";
-            reg = <0x00000000 0x0007a000>;
+            reg = <0x0001f000 0x00052000>;
         };
 
-        /* 0x7a000 から 0x6000 (24KB) を保存領域に使用 */
-        storage_partition: partition@7a000 {
+        /* 0x71000 - 0x75000 (16KB): ZMK Storage / NVS */
+        storage_partition: partition@71000 {
             label = "storage_partition";
-            reg = <0x0007a000 0x0006000>;
+            reg = <0x00071000 0x00004000>;
+        };
+
+        /* 0x75000 - 0x7E000 (36KB): Nordic Secure DFU Bootloader */
+        boot_partition: partition@75000 {
+            label = "boot_partition";
+            reg = <0x00075000 0x00009000>;
         };
     };
 };
+
 
 &sram0 {
 	status = "okay";

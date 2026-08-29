@@ -1,0 +1,12 @@
+# Caravelle BLE board configuration
+
+if BOARD_CARAVELLE
+
+config BOARD
+	default "caravelle"
+
+config BT_CTLR
+	default BT
+
+endif # BOARD_CARAVELLE
+
