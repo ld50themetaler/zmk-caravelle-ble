@@ -148,11 +148,24 @@ jobs:
       - name: Rename artifacts
         shell: sh -x {0}
         run: |
-          mkdir "${{ env.build_dir }}/artifacts"
+          mkdir -p "${{ env.build_dir }}/artifacts"
           if [ -f "${{ env.build_dir }}/zephyr/zmk.uf2" ]; then
             cp "${{ env.build_dir }}/zephyr/zmk.uf2" "${{ env.build_dir }}/artifacts/${{ env.artifact_name }}.uf2"
           elif [ -f "${{ env.build_dir }}/zephyr/zmk.${{ inputs.fallback_binary }}" ]; then
             cp "${{ env.build_dir }}/zephyr/zmk.${{ inputs.fallback_binary }}" "${{ env.build_dir }}/artifacts/${{ env.artifact_name }}.${{ inputs.fallback_binary }}"
+          fi
+          if [ -f "${{ env.build_dir }}/zephyr/zmk.hex" ]; then
+            cp "${{ env.build_dir }}/zephyr/zmk.hex" "${{ env.build_dir }}/artifacts/${{ env.artifact_name }}.hex"
+          fi
+
+      - name: Generate Nordic DFU OTA Package
+        shell: bash
+        run: |
+          pip install cryptography
+          if [ -f "${{ env.build_dir }}/zephyr/zmk.bin" ]; then
+            python3 "${GITHUB_WORKSPACE}/tools/generate_ota.py" \
+              "${{ env.build_dir }}/zephyr/zmk.bin" \
+              -o "${{ env.build_dir }}/artifacts/${{ env.artifact_name }}_ota.zip"
           fi
 
       - name: Archive (${{ env.display_name }})
@@ -160,6 +173,7 @@ jobs:
         with:
           name: artifact-${{ env.artifact_name }}
           path: ${{ env.build_dir }}/artifacts
+
 
   merge:
     runs-on: ubuntu-latest
