@@ -1,23 +1,60 @@
 # Caravelle BLE用のZMKファームウェア
-2019年に発売された左右分割完全無線の傑作キーボード Caravelle BLEをより快適に使い続けるべく、ZMKへ移植しました  
-ただし、現状ではOTAでのファームウェアアップデートに対応しておらず、ST-LinkなどのSWDデバイスを使用して、有線で書き込む必要があります
+2019年に発売された左右分割完全無線の傑作キーボード Caravelle BLEをより快適に使い続けるべく、ZMKへ移植しました。  
+Caravelle BLE 純正の SoftDevice (S132 v3.0.0) + ブートローダ環境に対応しており、**Bluetooth 経由での OTA ファームウェアアップデート**が可能です。  
+（※初回導入時やブートローダ復旧時は、ST-Link などの SWD デバイスを使用した有線書き込みも可能です）
 
 ## 特徴
+* **Bluetooth (OTA) 経由でのファームウェアアップデート対応**
+  * Caravelle BLE 純正のブートローダ環境のまま、PC ブラウザやスマホアプリからワイヤレスで書き換え可能
 * ZMK Studioによるリアルタイムのキーマップ編集
 * GitHub Actionsによるオンラインビルド
-  * QMKのビルド環境は構築難易度がやや高かったので、簡単になりました
+  * リポジトリへの push や手動実行で、左右それぞれの `.hex` / `.bin` および署名済み OTA 用パッケージ (`.zip`) が自動生成されます
 * 安定＆低遅延な使用感
 * 複数デバイス間のBluetooth接続先のスムーズな切り替え
 
-## 未対応機能
+## ファームウェアの更新方法 (OTAアップデート)
+
+GitHub Actions のビルド成果物（Artifacts: `caravelle_ble_firmware`）に含まれる以下のパッケージを使用して、ワイヤレスでアップデートできます。
+* **左手用**: `caravelle_left_central_ota.zip`
+* **右手用**: `caravelle_right_peripheral_ota.zip`
+
+### 1. PC からの OTA アップデート (Web Bluetooth) 【自己責任】
+
+Web Bluetooth API に対応したブラウザ（Google Chrome、Microsoft Edge など）を使用することで、PC から直接 OTA アップデートが可能です。
+
+> [!WARNING]
+> **【重要・自己責任】**  
+> PC の Web ブラウザ経由での OTA アップデートは、Bluetooth アダプタや OS 環境・ブラウザの挙動によって通信が途切れるリスクがあります。転送失敗等により万が一文鎮化した場合は、ST-Link 等の SWD ライタを用いた有線復旧が必要となります。必ず**自己責任**であることをご了承の上でご利用ください。
+
+* **アップデートツール**: [Web Bluetooth DFU (thegecko.github.io)](https://thegecko.github.io/web-bluetooth-dfu/examples/web.html)
+
+**手順:**
+1. キーボード側で DFU (ブートローダ) モードに入ります（キーマップに割り当てた `&bootloader` を押すか、基板上のリセット操作等）。デバイスが DFU 待機状態 (`DfuTarg` など) になります。
+2. 上記サイトを Chrome 等で開き、画面の指示に従って Bluetooth デバイスをスキャン・接続します。
+3. ダウンロードした OTA パッケージ（左手なら `caravelle_left_central_ota.zip`、右手なら `caravelle_right_peripheral_ota.zip`）を選択します。
+4. アップデートを実行し、100% 完了するまでキーボードの電源を切らずにお待ちください。
+
+### 2. スマートフォンからの OTA アップデート (公式アプリ推奨)
+
+Nordic 公式アプリを使用すると、安定して OTA アップデートが行えます。
+
+* **対応アプリ**:
+  * **nRF Connect for Mobile** (iOS / Android)
+  * **nRF Device Firmware Update** (iOS / Android)
+* **手順**:
+  1. スマホに OTA パッケージ (`.zip`) をダウンロード・保存します。
+  2. キーボードを DFU モードにします。
+  3. アプリを起動してスキャンし、`DfuTarg` に接続します。
+  4. DFU 画面から zip ファイル（Distribution packet (ZIP)）を選択して転送します。
+
+---
+
+## 未対応機能 / 課題
 * バッテリー残量表示
   * 一次電池＆USB接続がない関係で、既存のバッテリー残量ライブラリがそのままでは正しい残量が表示されず使えませんでした
   * ライブラリをフォークして改造するなどで対応ができそうではあります
-* OTAによるファームウェアアップデート
-  * Caravelle BLEの純正のブートローダの仕様がはっきりわからないため、対応が難航しています
-  * 理論的には可能ではあるはずですが…
 
-## ざっくりとした使い方 (人柱向け
+## 初回導入時や有線での書き込み (ST-Link 使用)
 * 想定環境 : Windows11 + WSL(Ubuntu) + Devcontainer
 * 必要なもの : ST-Link の互換機 (私はこれを使用  
   https://ja.aliexpress.com/item/1005008843849127.html
@@ -25,12 +62,13 @@
     https://www.amazon.co.jp/dp/B09WVQNFNM  
     <img width="215" height="300" alt="image" src="https://github.com/user-attachments/assets/87a66ece-e8ee-479c-a53a-e3ee78e49a1f" />
 
-## 注意
-* ST-Linkを使用してPCBにFWを書き込みます。Bluetoothから書き込むことはできません。
-* ブートローダを上書きするので、QMK版のFWが使えなくなります。  
-  元に戻すにはブートローダの復旧などが必要です。意味が分からない方は本FWを使用しないでください。
 
-## 手順
+## 注意
+* 初回導入時やブートローダ復旧時は ST-Link を使用して PCB に有線で書き込みます。ZMK 導入後は Bluetooth 経由での OTA アップデートが利用可能です。
+* ブートローダを全消去して上書きした場合は、OTA や以前の環境に戻す際にブートローダの復旧（本ページ末尾参照）が必要となります。
+
+## 手順 (ST-Link 使用時)
+
 1. ビルド環境の作成  
    GitHub Actionsでオンラインビルドする場合は不要です
    1. zmk-workspaceの手順で開発コンテナを使用して、zmkのローカルビルドを整える  
@@ -60,8 +98,7 @@
   https://github.com/ld50themetaler/zmk-caravelle-ble/blob/main/config/caravelle.keymap
 
 ## TODO
-* 純正のソフトデバイス+ブートローダーを使用したOTAによるファームウェア書き込み (現状は ST-Link を使用した有線書き込みのみ対応)
-  * nrfutilの現在のインストール手順などの情報の整理が必要
+* ~~純正のソフトデバイス+ブートローダーを使用したOTAによるファームウェア書き込み~~ (対応完了)
 * ~~デフォルトレイヤに Qwerty を追加~~ (済)
 * バッテリーの残量表示に対応する (現状は常に 100% になってるみたいです)
 * 安定性の確認 (1日程度しか動作させていないので、安定性は試せていません)
