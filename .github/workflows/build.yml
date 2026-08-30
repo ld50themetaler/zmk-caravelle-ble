@@ -7,6 +7,9 @@ on:
       - 'build.yaml'
       - 'tools/**'
       - '.github/workflows/**'
+      - 'RELEASE_NOTES.md'
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 jobs:
@@ -112,3 +115,33 @@ jobs:
           name: caravelle_ble_firmware
           path: artifacts/
 
+  release:
+    name: Publish GitHub Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: caravelle_ble_firmware
+          path: artifacts/
+
+      - name: Publish Pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/caravelle_left_central_ota.zip
+            artifacts/caravelle_right_peripheral_ota.zip
+            artifacts/caravelle_left_central.hex
+            artifacts/caravelle_left_central.bin
+            artifacts/caravelle_right_peripheral.hex
+            artifacts/caravelle_right_peripheral.bin
+          prerelease: true
+          name: Caravelle BLE ZMK Firmware ${{ github.ref_name }} (開発版)
+          body_path: RELEASE_NOTES.md
