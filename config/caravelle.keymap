@@ -68,7 +68,7 @@
 
         default_layer {
             bindings = <
-&mt LGUI ESC   &kp SQT        &kp COMMA  &kp DOT             &kp P            &kp Y  &kp F         &kp G     &kp C  &kp R  &kp L                &kp SLASH
+&mt LGUI ESC   &kp SQT        &kp COMMA  &lt 4 DOT           &kp P            &kp Y  &kp F         &kp G     &kp C  &kp R  &kp L                &kp SLASH
 &mt LCTRL TAB  &kp A          &kp O      &mt LEFT_CONTROL E  &kp U            &kp I  &kp LPAR      &kp RPAR  &kp D  &kp H  &mt RIGHT_CONTROL T  &kp N      &kp S  &kp MINUS
 &kp LSHFT      &kp SEMICOLON  &kp Q      &kp J               &kp K            &kp X  &kp LBRC      &kp RBRC  &kp B  &kp M  &kp W                &kp V      &kp Z  &kp RSHIFT
 &mo 3          &mt LALT BSPC  &mo 1      &mt LSHIFT SPACE    &mt RCTRL ENTER  &mo 2  &mt LALT TAB  &mo 3
@@ -81,8 +81,7 @@
             bindings = <
 &trans  &kp F1        &kp F2   &kp F3               &kp F4    &kp F5   &none   &kp HOME  &kp PAGE_DOWN    &kp PAGE_UP  &kp END   &trans
 &trans  &kp F6        &kp F7   &mt LEFT_CONTROL F8  &kp F9    &kp F10  &mo 3   &trans    &alt_grav_macro  &kp LEFT     &kp DOWN  &kp UP  &kp RIGHT  &trans
-&trans  &kp F11       &kp F12  &kp PSCRN            &kp SLCK  &kp INS  &trans  &trans    &mkp LCLK        &mkp MCLK    &mkp RCLK &msc SCRL_DOWN &msc SCRL_UP &trans
-
+&trans  &kp F11       &kp F12  &kp PSCRN            &kp SLCK  &kp INS  &trans  &trans    &none            &none        &none     &none   &none      &trans
 &trans  &mt LALT DEL  &trans   &trans               &trans    &trans   &trans  &trans
             >;
         };
@@ -106,8 +105,20 @@
 &studio_unlock  &sys_reset    &bootloader   &bt BT_CLR_ALL  &bt BT_CLR    &trans        &bootloader   &bt BT_CLR_ALL  &bt BT_CLR    &none         &none         &none         &sys_reset  &studio_unlock
 
 &none           &none         &none         &trans          &none         &none         &none         &none           &none         &none         &none         &trans        &trans      &trans
-&trans          &trans        &trans        &trans          &trans
+&trans          &trans        &trans        &trans          &trans        &trans        &trans        &trans
             >;
         };
+
+        // レイヤー 4: _MOUSE
+
+        mouse_layer {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans          &msc SCRL_UP    &msc SCRL_DOWN  &trans        &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans          &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans          &mkp LCLK       &mkp MCLK       &mkp RCLK     &trans           &trans  &trans
+&trans  &trans  &trans  &trans  &mkp LCLK  &mkp RCLK  &trans  &trans
+            >;
+        };
+
     };
 };
