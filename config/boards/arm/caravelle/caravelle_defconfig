@@ -38,3 +38,7 @@ CONFIG_ZMK_USB=n
 
 
 CONFIG_USB_DEVICE_STACK=n
+
+# Mouse Emulation (Pointing)
+CONFIG_ZMK_POINTING=y
+
