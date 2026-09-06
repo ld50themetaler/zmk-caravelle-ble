@@ -60,17 +60,18 @@ python3 "$REPO_DIR/tools/generate_ota.py" \
   --bin "$OUT_DIR/caravelle_left_central.bin" \
   --key "$REPO_DIR/config/keys/private_key.pem" \
   --app-version 1 \
-  --hw-version 52 \
-  --sd-req 0x00B6 \
+  --hw-version 0 \
+  --sd-req 0x8C \
   --out "$OUT_DIR/caravelle_left_central_ota.zip"
 
 python3 "$REPO_DIR/tools/generate_ota.py" \
   --bin "$OUT_DIR/caravelle_right_peripheral.bin" \
   --key "$REPO_DIR/config/keys/private_key.pem" \
   --app-version 1 \
-  --hw-version 52 \
-  --sd-req 0x00B6 \
+  --hw-version 0 \
+  --sd-req 0x8C \
   --out "$OUT_DIR/caravelle_right_peripheral_ota.zip"
+
 
 echo ""
 echo "========================================================="
