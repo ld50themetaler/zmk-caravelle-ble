@@ -1,10 +1,11 @@
-/*
+/* 
  * Nordic Secure DFU behavior definition
  */
 
 / {
     behaviors {
-        nordic_dfu: nordic_dfu {
+        // Behavior can be invoked on peripherals, so name must be <= 8 characters.
+        nordic_dfu: nrf_dfu {
             compatible = "zmk,behavior-nordic-dfu";
             #binding-cells = <0>;
             display-name = "Nordic DFU";
