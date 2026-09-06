@@ -3,7 +3,7 @@
 2019年に発売された左右分割完全無線キーボード **Caravelle BLE** 向けの ZMK ファームウェア開発版です。  
 純正のブートローダ環境（SoftDevice S132 v3.0.0）をそのまま活かし、**Bluetooth 経由のワイヤレス OTA (Over-The-Air) アップデート** に対応しました。
 
-詳しい導入手順や最新仕様については、[README.md](https://github.com/ld50themetaler/zmk-caravelle-ble/blob/dev-ota/README.md) をご確認ください。
+詳しい導入手順や最新仕様については、[README.md](https://github.com/ld50themetaler/zmk-caravelle-ble/blob/main/README.md) をご確認ください。
 
 ---
 
@@ -155,4 +155,4 @@ Caravelle BLE は左右合計 48 キー（各手 24 キー）の左右分割レ�
 ---
 
 ## 🛠️ 有線リカバリについて
-通常の使用や初回導入時には ST-Link は不要ですが、万が一の文鎮化やブートローダ復旧が必要な場合は、[README.md の有線復旧手順](https://github.com/ld50themetaler/zmk-caravelle-ble/blob/dev-ota/README.md#有線でのトラブル復旧--リカバリ-st-link-使用) をご参照ください。
+通常の使用や初回導入時には ST-Link は不要ですが、万が一の文鎮化やブートローダ復旧が必要な場合は、[README.md の有線復旧手順](https://github.com/ld50themetaler/zmk-caravelle-ble/blob/main/README.md#有線でのトラブル復旧--リカバリ-st-link-使用) をご参照ください。

@@ -6,6 +6,8 @@ on:
       - 'config/**'
       - 'build.yaml'
       - 'tools/**'
+      - 'modules/**'
+      - 'scripts/**'
       - '.github/workflows/**'
       - 'RELEASE_NOTES.md'
     tags:

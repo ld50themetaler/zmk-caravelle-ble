@@ -2,20 +2,28 @@
 set -e
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-WORKSPACE_DIR="/home/ld50/zmk-workspace"
+WORKSPACE_DIR="${ZMK_WORKSPACE:-$HOME/zmk-workspace}"
 OUT_DIR="$REPO_DIR/artifacts"
+
+if [ ! -d "$WORKSPACE_DIR" ]; then
+    echo "[ERROR] ZMK workspace directory not found at: $WORKSPACE_DIR"
+    echo "Please specify your ZMK workspace directory via ZMK_WORKSPACE environment variable, e.g.:"
+    echo "  export ZMK_WORKSPACE=/path/to/zmk-workspace"
+    exit 1
+fi
 
 mkdir -p "$OUT_DIR"
 
 echo "========================================================="
 echo " Fast Local Build for Caravelle BLE (with Docker)"
-echo " Source: $REPO_DIR"
-echo " Output: $OUT_DIR"
+echo " Source   : $REPO_DIR"
+echo " Workspace: $WORKSPACE_DIR"
+echo " Output   : $OUT_DIR"
 echo "========================================================="
 
 # 1. Build Left (Central)
 echo ""
-echo ">>> [1/4] Building Left (Central)..."
+echo ">>> [1/3] Building Left (Central)..."
 docker run --rm \
   -v "$WORKSPACE_DIR":/workspace \
   -v "$REPO_DIR":/workspace/config/zmk-caravelle-ble \
@@ -29,13 +37,12 @@ docker run --rm \
              -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y \
              -DZMK_EXTRA_MODULES='/workspace/modules/zmk-feature-non-lipo-battery-management;/workspace/modules/prospector-zmk-module;/workspace/config/zmk-caravelle-ble/modules/zmk-behavior-nordic-dfu'"
 
-
 cp "$WORKSPACE_DIR/.build/caravelle_left/zephyr/zmk.hex" "$OUT_DIR/caravelle_left_central.hex"
 cp "$WORKSPACE_DIR/.build/caravelle_left/zephyr/zmk.bin" "$OUT_DIR/caravelle_left_central.bin"
 
 # 2. Build Right (Peripheral)
 echo ""
-echo ">>> [2/4] Building Right (Peripheral)..."
+echo ">>> [2/3] Building Right (Peripheral)..."
 docker run --rm \
   -v "$WORKSPACE_DIR":/workspace \
   -v "$REPO_DIR":/workspace/config/zmk-caravelle-ble \
@@ -49,13 +56,12 @@ docker run --rm \
              -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n \
              -DZMK_EXTRA_MODULES='/workspace/modules/zmk-feature-non-lipo-battery-management;/workspace/modules/prospector-zmk-module;/workspace/config/zmk-caravelle-ble/modules/zmk-behavior-nordic-dfu'"
 
-
 cp "$WORKSPACE_DIR/.build/caravelle_right/zephyr/zmk.hex" "$OUT_DIR/caravelle_right_peripheral.hex"
 cp "$WORKSPACE_DIR/.build/caravelle_right/zephyr/zmk.bin" "$OUT_DIR/caravelle_right_peripheral.bin"
 
 # 3. Generate OTA Packages
 echo ""
-echo ">>> [3/4] Generating Nordic Secure DFU OTA Packages..."
+echo ">>> [3/3] Generating Nordic Secure DFU OTA Packages..."
 python3 "$REPO_DIR/tools/generate_ota.py" \
   --bin "$OUT_DIR/caravelle_left_central.bin" \
   --key "$REPO_DIR/config/keys/private_key.pem" \
@@ -71,8 +77,6 @@ python3 "$REPO_DIR/tools/generate_ota.py" \
   --hw-version 52 \
   --sd-req 0x00B6 \
   --out "$OUT_DIR/caravelle_right_peripheral_ota.zip"
-
-
 
 echo ""
 echo "========================================================="
