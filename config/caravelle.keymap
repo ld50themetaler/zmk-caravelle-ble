@@ -12,7 +12,7 @@
  * ==============================================================================
  */
 #ifndef USE_DVORAK_AS_DEFAULT
-#define USE_DVORAK_AS_DEFAULT 0
+#define USE_DVORAK_AS_DEFAULT 1
 #endif
 
 / {
