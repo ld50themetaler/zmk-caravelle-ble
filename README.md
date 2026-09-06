@@ -1,21 +1,31 @@
-# Caravelle BLE用のZMKファームウェア
-2019年に発売された左右分割完全無線の傑作キーボード Caravelle BLEをより快適に使い続けるべく、ZMKへ移植しました。  
-QMK + nRF52 の純正ファームウェア環境から、そのまま **Bluetooth 経由の OTA アップデート**で本 ZMK ファームウェアを導入・更新できます。  
-（※ ST-Link 等の SWD 機器が必要になるのは、何らかの問題が発生して有線でのリカバリが必要になった場合のみです）
+# Caravelle BLE ZMK Firmware
 
+自作キーボードキット「[Caravelle-BLE](https://satt.booth.pm/items/1644450)」を [ZMK Firmware](https://zmk.dev/) で動作させるための設定リポジトリです。  
+QMK + nRF52 環境から、ハードウェア改造なしにワイヤレス (OTA) のまま ZMK に移行・運用できます。
+
+---
 
 ## 特徴
-* **Bluetooth (OTA) 経由でのファームウェアアップデート対応**
-  * Caravelle BLE 純正のブートローダ環境のまま、PC ブラウザやスマホアプリからワイヤレスで書き換え可能
-* ZMK Studioによるリアルタイムのキーマップ編集
-* GitHub Actionsによるオンラインビルド
-  * リポジトリへの push や手動実行で、左右それぞれの `.hex` / `.bin` および署名済み OTA 用パッケージ (`.zip`) が自動生成されます
-* 安定＆低遅延な使用感
-* 複数デバイス間のBluetooth接続先のスムーズな切り替え
+* **Bluetooth (OTA) 経由でのファームウェアアップデート完全対応**
+  * Caravelle BLE 純正のブートローダ（Nordic SDK 12.3.0 Secure DFU）環境のまま、PC ブラウザやスマホアプリからワイヤレスで書き換え可能
+* **キー入力による Nordic Secure DFU（DfuTarg）モード移行に対応 (`&nordic_dfu`)**
+  * ADJUST レイヤーのキー操作だけで、物理タクトスイッチ（SW3/SW4）を押すことなく左右それぞれ単体でブートローダ（`DfuTarg`）に突入可能
+  * DFU 待機中にファームウェア更新をやめたくなった場合でも、**電源を OFF ➡️ ON にするだけで通常キーボードに安全に復帰**
+* **マウスキー機能（Pointing）対応**
+  * `CONFIG_ZMK_POINTING=y` により、キーボード単体でマウスカーソル移動、左右中クリック、ホイールスクロールが可能
+  * デフォルトレイヤーの `.`（ピリオド）長押しで即座にマウスレイヤーが発動
+* **ZMK Studio によるリアルタイムのキーマップ編集**
+  * Bluetooth 接続対応の ZMK Studio デスクトップ版から、GUI 上でキーマップを直感的にカスタマイズ可能
+* **GitHub Actions & 高速ローカルビルド対応**
+  * GitHub Actions による自動パッケージングに加え、ローカル Docker 環境（`scripts/build_local.sh`）により約 15〜20 秒で左右のファームウェアと OTA zip のコンパイルが可能
+* **安定＆低遅延な使用感 / マルチペアリング (最大 6 台)**
+  * 複数台の PC やスマートフォンとペアリングし、ワンタッチでスムーズに切り替え可能
+
+---
 
 ## ファームウェアの更新方法 (OTAアップデート)
 
-GitHub Actions のビルド成果物（Artifacts: `caravelle_ble_firmware`）に含まれる以下のパッケージを使用して、ワイヤレスでアップデートできます。
+GitHub Actions のビルド成果物（Artifacts: `caravelle_ble_firmware`）またはローカルビルド（`artifacts/`）に含まれる以下のパッケージを使用して、ワイヤレスでアップデートできます。
 * **左手用**: `caravelle_left_central_ota.zip`
 * **右手用**: `caravelle_right_peripheral_ota.zip`
 
@@ -30,7 +40,7 @@ Web Bluetooth API に対応したブラウザ（Google Chrome、Microsoft Edge �
 * **アップデートツール**: [Web Bluetooth DFU (thegecko.github.io)](https://thegecko.github.io/web-bluetooth-dfu/examples/web.html)
 
 **手順:**
-1. キーボード側で DFU (ブートローダ) モードに入ります（キーマップに割り当てた `&bootloader` を押すか、基板上のリセット操作等）。デバイスが DFU 待機状態 (`DfuTarg` など) になります。
+1. キーボード側で DFU (ブートローダ) モードに入ります（ADJUST レイヤーの `&nordic_dfu` キーを押すか、基板上のタクトスイッチを押しながら電源 ON）。デバイスが DFU 待機状態 (`DfuTarg`) になります。
 2. 上記サイトを Chrome 等で開き、画面の指示に従って Bluetooth デバイスをスキャン・接続します。
 3. ダウンロードした OTA パッケージ（左手なら `caravelle_left_central_ota.zip`、右手なら `caravelle_right_peripheral_ota.zip`）を選択します。
 4. アップデートを実行し、100% 完了するまでキーボードの電源を切らずにお待ちください。
@@ -60,40 +70,27 @@ OTA アップデートの失敗等でキーボードが起動しなくなった�
 **※ 通常の使用や初回導入時には ST-Link は不要です（OTA で書き換え可能です）。**
 
 * 想定環境 : Windows11 + WSL(Ubuntu) + Devcontainer
-* 必要なもの : ST-Link の互換機 (私はこれを使用  
-  https://ja.aliexpress.com/item/1005008843849127.html
-  * Amazon.co.jp で売ってるこういうのも使えるはず  
-    https://www.amazon.co.jp/dp/B09WVQNFNM  
-    <img width="215" height="300" alt="image" src="https://github.com/user-attachments/assets/87a66ece-e8ee-479c-a53a-e3ee78e49a1f" />
+* 必要なもの : ST-Link の互換機 (例: AliExpress や Amazon で入手可能な安価な ST-Link V2 クローン)
 
 ### 注意
 * ブートローダや SoftDevice を全消去（mass_erase）した場合は、OTA 機能が失われます。その場合は本ページ末尾の「ソフトデバイスとブートローダの復旧」手順を行ってください。
 
 ### 復旧手順 (ST-Link 使用時)
 
-
-1. ビルド環境の作成  
-   GitHub Actionsでオンラインビルドする場合は不要です
-   1. zmk-workspaceの手順で開発コンテナを使用して、zmkのローカルビルドを整える  
-     https://t.co/TKqf0q6Pdm  
+1. ビルド環境の作成（GitHub Actionsでオンラインビルドする場合は不要）
+   1. zmk-workspaceの手順で開発コンテナを使用して、zmkのローカルビルドを整える
    1. config/zmk-caravelle-ble として zmk-caravelle-ble リポジトリを git clone
-   1. $ just init ./config/zmk-caravelle-ble を実行
-   1. $ just clean && just build caravelle でビルド
-   1. firmwareディレクトリに以下のファイルが出力される  
-      caravelle_left_central.bin  
-      caravelle_right_peripheral.bin
-1. 以下を参考にして openocd 環境を構築  
-   ST-Linkを使用してファームウェアを書き込めれば、OpenOCD以外のツールでもかまいません  
-   https://nahitafu.cocolog-nifty.com/nahitafu/2024/01/post-9784e8.html
-1. ST-Linkを左手のCaravelle BLEのPCBのシルク印刷に従って接続
-1. WSLのUbuntuで以下のコマンドを実行して、PCBと接続できていることを確認(Ctrl+Cで終了できます  
-   $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg
+   1. scripts/build_local.sh を実行してビルド
+1. ST-LinkをCaravelle BLEのPCBのシルク印刷（3.3V GND SWDIO SWDCLK）に従って接続
+1. WSLのUbuntuで以下のコマンドを実行して、PCBと接続できていることを確認
+   `$ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg`
 1. 以下のコマンドで左手分を書き込み  
-   $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; nrf5 mass_erase; program ./firmware/caravelle_left_central.bin 0x0 verify reset; exit"
-1. 同様に右手のPCBにST-Linkを接続して、以下のコマンドで右手分を書き込み  
-   $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; nrf5 mass_erase; program ./firmware/caravelle_right_peripheral.bin 0x0 verify reset; exit"
-1. ホスト側のBluetooth情報をリセットして、"Caravelle "という名前で検出されるので接続する
-1. ZMK Studioを使用する場合は、Web版はUSB接続しか使えないため、Bluetooth接続に対応したデスクトップ版を使用してください
+   `$ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; nrf5 mass_erase; program ./artifacts/caravelle_left_central.bin 0x0 verify reset; exit"`
+1. 同様に右手のPCBにST-Linkを接続して右手分を書き込み  
+   `$ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; nrf5 mass_erase; program ./artifacts/caravelle_right_peripheral.bin 0x0 verify reset; exit"`
+1. ホスト側のBluetooth情報をリセットして、"Caravelle BLE" という名前で検出されるので接続する
+
+---
 
 ## キーマップ構成・レイアウト図
 
@@ -105,7 +102,7 @@ Caravelle BLE は左右合計 48 キー（各手 24 キー）の左右分割レ�
 ```text
 【左手 (Left)】                                                     【右手 (Right)】
 +----------+------+------+----------+------+------+                +------+------+----------+------+------+------+
-| GUI / ESC|  '   |  ,   |    .     |  P   |  Y   |                |  F   |  G   |    C     |  R   |  L   |  /   |
+| GUI / ESC|  '   |  ,   |LT 4 / .  |  P   |  Y   |                |  F   |  G   |    C     |  R   |  L   |  /   |
 +----------+------+------+----------+------+------+------+  +------+------+------+----------+------+------+------+
 | CTL / TAB|  A   |  O   | CTL / E  |  U   |  I   |  (   |  |  )   |  D   |  H   | CTL / T  |  N   |  S   |  -   |
 +----------+------+------+----------+------+------+------+  +------+------+------+----------+------+------+------+
@@ -115,7 +112,8 @@ Caravelle BLE は左右合計 48 キー（各手 24 キー）の左右分割レ�
                   +------+----------+------+---------+      +---------+------+---------+------+
 ```
 
-* **Mod-Tap キー (`単押し / 長押し`)**:
+* **Mod-Tap & Layer-Tap キー (`単押し / 長押し`)**:
+  * `LT 4 / .`: タップで `.`（ピリオド）、ホールドで **マウスレイヤー (Layer 4)** が発動
   * `GUI / ESC`: タップで `Escape`、ホールドで `GUI (Win / Cmd)`
   * `CTL / TAB`: タップで `Tab`、ホールドで `Left Control`
   * `CTL / E`: タップで `E`、ホールドで `Left Control`
@@ -162,16 +160,16 @@ Caravelle BLE は左右合計 48 キー（各手 24 キー）の左右分割レ�
                   +------+----------+------+---------+      +---------+------+---------+------+
 ```
 
-### Layer 3: ADJUST (システム設定・Bluetooth切替・OTA待機モード)
+### Layer 3: ADJUST (システム設定・Bluetooth切替・ワイヤレスDFU突入)
 
-親指の `ADJ(3)` を押すことでアクティブになります。
+親指の `ADJ(3)` を押すことでアクティブになります。左右対称に配置されています。
 
 ```text
 【左手 (Left)】                                                     【右手 (Right)】
 +----------+------+------+----------+------+------+                +------+------+----------+------+------+------+
 |   BT 0   | BT 1 | BT 2 |   BT 3   | BT 4 | BT 5 |                | BT 0 | BT 1 |   BT 2   | BT 3 | BT 4 | BT 5 |
 +----------+------+------+----------+------+------+------+  +------+------+------+----------+------+------+------+
-|  STUDIO  |RESET | DFU  | CLR_ALL  | CLR  |      | DFU  |  |CLR_ALL| CLR  |      |          |      |RESET |STUDIO|
+|  STUDIO  |RESET | DFU  | CLR_ALL  | CLR  |      | DFU  |  | DFU  |      | CLR  | CLR_ALL  | DFU  |RESET |STUDIO|
 +----------+------+------+----------+------+------+------+  +------+------+------+----------+------+------+------+
 |          |      |      |          |      |      |      |  |      |      |      |          |      |      |      |
 +----------+------+------+----------+------+------+------+  +------+------+------+----------+------+------+------+
@@ -179,33 +177,58 @@ Caravelle BLE は左右合計 48 キー（各手 24 キー）の左右分割レ�
                   +------+----------+------+---------+      +---------+------+---------+------+
 ```
 
-* **`DFU` (`&bootloader`)**: **Nordic Secure DFU ブートローダを起動し、OTA アップデート待機状態に入ります**
+* **`DFU` (`&nordic_dfu`)**: **Nordic Secure DFU ブートローダを起動し、OTA アップデート待機状態に入ります**
+  * 左手側の `DFU`（`O` キーまたは `(` キー）を押すと **左手（セントラル）だけが `DfuTarg` に突入**
+  * 右手側の `DFU`（`N` キーまたは `)` キー）を押すと **右手（ペリフェラル）だけが `DfuTarg` に突入**
+  * 分割キーボードの物理タクトスイッチ（SW3/SW4）を押す必要がなく、完全ワイヤレスでアップデート可能
+  * アップデートをやめたくなった場合でも、**電源を OFF ➡️ ON にするだけで通常モードに安全復帰**
 * **`BT 0` 〜 `BT 5`**: Bluetooth 接続先（プロファイル 0〜5）を切り替え（最大 6 台）
 * **`CLR` (`bt BT_CLR`)**: 現在選択中の Bluetooth プロファイルのペアリング情報を削除
 * **`CLR_ALL` (`bt BT_CLR_ALL`)**: **すべての Bluetooth 接続先ペアリング情報を一括全消去**
 * **`RESET` (`&sys_reset`)**: キーボードの再起動
 * **`STUDIO` (`&studio_unlock`)**: ZMK Studio の編集ロック解除
 
+### Layer 4: MOUSE (マウス操作)
+
+デフォルトレイヤーの `.`（ピリオド）キーを長押ししている間アクティブになります。
+
+```text
+【左手 (Left)】                                                     【右手 (Right)】
++----------+------+------+----------+------+------+                +------+------+----------+------+------+------+
+|          |      | RCLK |          | LCLK |      |                |      |      | SCRL_DN  |SCRL_UP|     |      |
++----------+------+------+----------+------+------+------+  +------+------+------+----------+------+------+------+
+|          |      | RCLK |          | LCLK | MCLK |      |  |      |      | LEFT |   DOWN   |  UP  |RIGHT |      |
++----------+------+------+----------+------+------+------+  +------+------+------+----------+------+------+------+
+|          |      |      |          |      |      |      |  |      |      | LCLK |   MCLK   | RCLK |      |      |
++----------+------+------+----------+------+------+------+  +------+------+------+----------+------+------+------+
+                  |      |          |      | LCLK | RCLK |  |      |      |      |          |
+                  +------+----------+------+---------+      +---------+------+---------+------+
+```
+
+* **カーソル移動**: 右手の `LEFT / DOWN / UP / RIGHT`（H/J/K/L 周辺）でマウスカーソルを操作
+* **クリック**: `LCLK`（左クリック）、`MCLK`（中クリック / ホイールクリック）、`RCLK`（右クリック）
+* **スクロール**: `SCRL_UP` / `SCRL_DN`（ホイール上下スクロール）
+
 キーマップ定義ファイル: [config/caravelle.keymap](config/caravelle.keymap)
+
+---
 
 ## 補足
 * ST-Linkの種類によっては付属ケーブルがメス-メスになっているようです。その時は自キーを作ってるとよく余るピンヘッダを使うとPCBに接続しやすいです
 
-
 ## TODO
 * ~~純正のソフトデバイス+ブートローダーを使用したOTAによるファームウェア書き込み~~ (対応完了)
+* ~~キー入力による左右両方のワイヤレスDFU突入（物理タクトスイッチ押下不要化）~~ (対応完了)
+* ~~マウスキー機能（CONFIG_ZMK_POINTING）の追加~~ (対応完了)
 * ~~デフォルトレイヤに Qwerty を追加~~ (済)
+* ~~ZMK の Keymap Editor に対応~~ (済)
 * バッテリーの残量表示に対応する (現状は常に 100% になってるみたいです)
-* 安定性の確認 (1日程度しか動作させていないので、安定性は試せていません)
+* 安定性の確認
 * 不要な設定の削除や、動作改善に関するチューニング
 * Readmeの導入手順の加筆
 * OpenOCDではなくもっと簡単な nRF Connect for Desktop での導入 (ST-Linkは必要ですが)
-* ~~ZMK の Keymap Editor に対応~~ (済)  
-  https://nickcoutsos.github.io/keymap-editor  
-  info.jsonを用意すればできるはず
 
 ## ソフトデバイスとブートローダの復旧
-* openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program ./zmk-workspace/bootloader/s132_nrf52_3.0.0_softdevice.hex verify" -c reset -c exit
-* openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; program ./zmk-workspace/caravelle_bootloader/caravelle_ble-bootloader.hex verify reset; exit"
+* `openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program ./zmk-workspace/bootloader/s132_nrf52_3.0.0_softdevice.hex verify" -c reset -c exit`
+* `openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; program ./zmk-workspace/caravelle_bootloader/caravelle_ble-bootloader.hex verify reset; exit"`
 * ソフトデバイスとブートローダーは本家のCaravelle BLEのビルドガイドに入手先が記載されています
-

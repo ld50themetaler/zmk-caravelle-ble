@@ -4,9 +4,6 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <dt-bindings/zmk/nordic_dfu.dtsi>
 
-/* &bootloader キー押下時に GPREGRET に 1 をセットして Nordic DFU モードを起動 */
-
-&bootloader { type = <1>; };
 
 / {
     // ========== 1. カスタムビヘイビアの定義 ==========
