@@ -27,7 +27,8 @@ docker run --rm \
              -DSHIELD=caravelle_left \
              -DCONFIG_ZMK_SPLIT=y \
              -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y \
-             -DZMK_EXTRA_MODULES='/workspace/modules/zmk-feature-non-lipo-battery-management;/workspace/modules/prospector-zmk-module'"
+             -DZMK_EXTRA_MODULES='/workspace/modules/zmk-feature-non-lipo-battery-management;/workspace/modules/prospector-zmk-module;/workspace/config/zmk-caravelle-ble/modules/zmk-behavior-nordic-dfu'"
+
 
 cp "$WORKSPACE_DIR/.build/caravelle_left/zephyr/zmk.hex" "$OUT_DIR/caravelle_left_central.hex"
 cp "$WORKSPACE_DIR/.build/caravelle_left/zephyr/zmk.bin" "$OUT_DIR/caravelle_left_central.bin"
@@ -46,7 +47,8 @@ docker run --rm \
              -DSHIELD=caravelle_right \
              -DCONFIG_ZMK_SPLIT=y \
              -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n \
-             -DZMK_EXTRA_MODULES='/workspace/modules/zmk-feature-non-lipo-battery-management;/workspace/modules/prospector-zmk-module'"
+             -DZMK_EXTRA_MODULES='/workspace/modules/zmk-feature-non-lipo-battery-management;/workspace/modules/prospector-zmk-module;/workspace/config/zmk-caravelle-ble/modules/zmk-behavior-nordic-dfu'"
+
 
 cp "$WORKSPACE_DIR/.build/caravelle_right/zephyr/zmk.hex" "$OUT_DIR/caravelle_right_peripheral.hex"
 cp "$WORKSPACE_DIR/.build/caravelle_right/zephyr/zmk.bin" "$OUT_DIR/caravelle_right_peripheral.bin"

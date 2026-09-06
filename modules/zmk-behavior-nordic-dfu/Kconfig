@@ -1,0 +1,5 @@
+config ZMK_BEHAVIOR_NORDIC_DFU
+	bool "Nordic Secure DFU behavior"
+	default y
+	help
+	  Enable Nordic Secure DFU behavior to reboot into DfuTarg.
