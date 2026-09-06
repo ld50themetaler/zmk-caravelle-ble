@@ -146,5 +146,5 @@ jobs:
             artifacts/caravelle_right_peripheral.hex
             artifacts/caravelle_right_peripheral.bin
           prerelease: true
-          name: Caravelle BLE ZMK Firmware ${{ github.ref_name }} (開発版)
+          name: Caravelle BLE ZMK Firmware ${{ github.ref_name }}
           body_path: RELEASE_NOTES.md
