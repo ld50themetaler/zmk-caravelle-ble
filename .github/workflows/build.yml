@@ -97,16 +97,16 @@ jobs:
             --bin artifacts/caravelle_left_central.bin \
             --key config/keys/private_key.pem \
             --app-version 1 \
-            --hw-version 52 \
-            --sd-req 0x00B6 \
+            --hw-version 0 \
+            --sd-req 0x8C \
             --out artifacts/caravelle_left_central_ota.zip
 
           python3 tools/generate_ota.py \
             --bin artifacts/caravelle_right_peripheral.bin \
             --key config/keys/private_key.pem \
             --app-version 1 \
-            --hw-version 52 \
-            --sd-req 0x00B6 \
+            --hw-version 0 \
+            --sd-req 0x8C \
             --out artifacts/caravelle_right_peripheral_ota.zip
 
           echo "=== Generated Artifacts ==="

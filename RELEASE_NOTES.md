@@ -13,8 +13,14 @@
 | :--- | :--- |
 | **`caravelle_left_central_ota.zip`** | **左手用（Central）BLE OTA アップデートパッケージ**（Nordic Secure DFU 署名済み） |
 | **`caravelle_right_peripheral_ota.zip`** | **右手用（Peripheral）BLE OTA アップデートパッケージ**（Nordic Secure DFU 署名済み） |
-| `caravelle_left_central.hex` / `.bin` | 左手用 ファームウェア（有線 ST-Link / SWD リカバリ用） |
-| `caravelle_right_peripheral.hex` / `.bin` | 右手用 ファームウェア（有線 ST-Link / SWD リカバリ用） |
+| `caravelle_left_central.hex` / `.bin` | 左手用 ビルド成果物（`0x1F000` 配置用アプリ単体 ※単体での `mass_erase` 書き込み不可） |
+| `caravelle_right_peripheral.hex` / `.bin` | 右手用 ビルド成果物（`0x1F000` 配置用アプリ単体 ※単体での `mass_erase` 書き込み不可） |
+
+> [!IMPORTANT]
+> **【過去の OTA 未対応版 ZMK を導入していた方へ】**  
+> 以前の OTA 未対応版（ST-Link で `mass_erase` して書き込む方式）を導入していた場合、基板から純正のソフトデバイスとブートローダが消去されています。  
+> また、本リリースの `.bin` / `.hex` はブートローダ環境（`0x1F000` 開始）を前提としたアプリ単体ファイルのため、そのまま `0x0` 番地に書き込むと `double fault` となり起動しません。  
+> **必ず先に [README.md の復旧手順](https://github.com/ld50themetaler/zmk-caravelle-ble/blob/main/README.md#有線でのトラブル復旧--リカバリ-st-link-使用) で純正のソフトデバイスとブートローダを復旧してから、`_ota.zip` を用いて OTA アップデートを行ってください。**
 
 ---
 

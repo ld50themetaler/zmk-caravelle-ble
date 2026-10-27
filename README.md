@@ -27,9 +27,14 @@ QMK + nRF52 環境から、ハードウェア改造なしにワイヤレス (OTA
 
 ## ファームウェアの更新方法 (OTAアップデート)
 
-GitHub Actions のビルド成果物（Artifacts: `caravelle_ble_firmware`）またはローカルビルド（`artifacts/`）に含まれる以下のパッケージを使用して、ワイヤレスでアップデートできます。
+GitHub Actions のビルド成果物（Artifacts: `caravelle_ble_firmware`）または Releases・ローカルビルド（`artifacts/`）に含まれる以下のパッケージを使用して、ワイヤレスでアップデートできます。
 * **左手用**: `caravelle_left_central_ota.zip`
 * **右手用**: `caravelle_right_peripheral_ota.zip`
+
+> [!IMPORTANT]
+> **【過去の OTA 未対応版 ZMK を導入していた方へ】**  
+> 以前の OTA 未対応版 ZMK（ST-Link で `mass_erase` して直接書き込む方式）を導入していた場合、基板から純正のソフトデバイス（SoftDevice）とブートローダが消去されています。  
+> v0.3.0 以降のファームウェアは純正ブートローダ環境（`0x1F000` 開始）を前提としているため、**先に「[有線でのトラブル復旧 / ソフトデバイスとブートローダの復旧](#有線でのトラブル復旧--リカバリ-st-link-使用)」の手順で純正のソフトデバイスとブートローダを復旧してから、以下の OTA アップデートを行ってください。**
 
 ### 1. PC からの OTA アップデート (Web Bluetooth) 【自己責任】
 
@@ -63,29 +68,44 @@ Nordic 公式アプリを使用すると、安定して OTA アップデート�
 ---
 
 ## 有線でのトラブル復旧 / リカバリ (ST-Link 使用)
-OTA アップデートの失敗等でキーボードが起動しなくなった場合など、有線での緊急復旧が必要になったときの手順です。  
-**※ 通常の使用や初回導入時には ST-Link は不要です（OTA で書き換え可能です）。**
+過去の **OTA 未対応版 ZMK を導入していた場合（`mass_erase` 済みの場合）** や、OTA アップデートの失敗等でキーボードが起動しなくなった場合に、ST-Link を使用して工場出荷時相当のブートローダ環境を復旧する手順です。  
+**※ 購入時の QMK 環境（純正ブートローダが残っている状態）からの初回導入や、通常のファームウェア更新時には ST-Link は不要です（そのまま OTA で書き換え可能です）。**
 
-* 想定環境 : Windows11 + WSL(Ubuntu) + Devcontainer
-* 必要なもの : ST-Link の互換機 (例: AliExpress や Amazon で入手可能な安価な ST-Link V2 クローン)
+* 想定環境 : Windows11 + WSL(Ubuntu) または Linux
+* 必要なもの :
+  * ST-Link の互換機 (例: AliExpress や Amazon で入手可能な安価な ST-Link V2 クローン)
+  * 純正のソフトデバイス (`s132_nrf52_3.0.0_softdevice.hex`) およびブートローダ (`caravelle_ble-bootloader.hex`)
+    * ※ 入手先は本家 [Caravelle-BLE のビルドガイド](https://github.com/satt-keyboards/caravelle-ble-buildguide) に記載されています。
 
-### 注意
-* ブートローダや SoftDevice を全消去（mass_erase）した場合は、OTA 機能が失われます。その場合は本ページ末尾の「ソフトデバイスとブートローダの復旧」手順を行ってください。
+> [!CAUTION]
+> **【`.bin` / `.hex` の直接書き込みに関する注意】**  
+> Releases や `artifacts/` に含まれる `caravelle_*.bin` および `caravelle_*.hex` は、**ZMK アプリケーション単体（開始アドレス `0x1F000`）** のファイルであり、SoftDevice（`0x00000`）やブートローダ（`0x75000`）、ブートローダ設定ページ（`0x7F000` の CRC 検証情報）を含んでいません。
+> * **`.bin` ファイル**: アドレス情報を持たない生バイナリです（OTA `.zip` パッケージ生成の元データ用）。OpenOCD で `0x0` 番地に書き込むとアドレス不一致により **`Error: [nrf52.cpu] clearing lockup after double fault`** が発生し起動しません。
+> * **`.hex` ファイル**: `0x1F000` 番地への配置情報を持つ Intel HEX ファイルですが、`nrf5 mass_erase` 後に単体で書き込んでも SoftDevice とブートローダが存在しないため起動しません。また、ブートローダがある状態で `.hex` だけを上書きしても、CRC 検証ページ（`0x7F000`）が更新されないためアプリが起動せず `DfuTarg` モードになります。
+>
+> **そのため、ST-Link で復旧する場合は必ず以下の手順で「純正ソフトデバイス＋ブートローダ」を書き戻し、その後 OTA（`.zip`）で ZMK ファームウェアを書き込んでください。**
 
-### 復旧手順 (ST-Link 使用時)
+### 復旧手順（ソフトデバイスとブートローダの復旧 ➡️ OTA 書き込み）
 
-1. ビルド環境の作成（GitHub Actionsでオンラインビルドする場合は不要）
-   1. zmk-workspaceの手順で開発コンテナを使用して、zmkのローカルビルドを整える
-   1. config/zmk-caravelle-ble として zmk-caravelle-ble リポジトリを git clone
-   1. scripts/build_local.sh を実行してビルド
-1. ST-LinkをCaravelle BLEのPCBのシルク印刷（3.3V GND SWDIO SWDCLK）に従って接続
-1. WSLのUbuntuで以下のコマンドを実行して、PCBと接続できていることを確認
-   `$ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg`
-1. 以下のコマンドで左手分を書き込み  
-   `$ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; nrf5 mass_erase; program ./artifacts/caravelle_left_central.bin 0x0 verify reset; exit"`
-1. 同様に右手のPCBにST-Linkを接続して右手分を書き込み  
-   `$ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; nrf5 mass_erase; program ./artifacts/caravelle_right_peripheral.bin 0x0 verify reset; exit"`
-1. ホスト側のBluetooth情報をリセットして、"Caravelle BLE" という名前で検出されるので接続する
+1. ST-Link を Caravelle BLE の PCB のシルク印刷（`3.3V` / `GND` / `SWDIO` / `SWDCLK`）に従って接続します。
+   * ※ ST-Link 側から給電されるため、キーボードの電池スイッチは OFF のままで構いません。
+2. ターミナル（WSL の Ubuntu 等）で以下のコマンドを実行し、PCB と接続できていることを確認します（確認後 `Ctrl+C` で終了）。
+   ```bash
+   $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg
+   ```
+3. 以下のコマンドでフラッシュを全消去（`mass_erase`）し、**純正ソフトデバイス (`s132_nrf52_3.0.0_softdevice.hex`)** を書き込みます。
+   ```bash
+   $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program ./s132_nrf52_3.0.0_softdevice.hex verify" -c reset -c exit
+   ```
+4. 続けて以下のコマンドで **純正ブートローダ (`caravelle_ble-bootloader.hex`)** を書き込みます（※ ここでは `mass_erase` を入れないでください）。
+   ```bash
+   $ openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; program ./caravelle_ble-bootloader.hex verify reset; exit"
+   ```
+5. 反対側の手（右手・左手）の PCB にも同様に手順 3・4 を実行し、純正のソフトデバイスとブートローダを書き戻します。
+6. ST-Link を取り外してキーボードの電源を ON にすると、左右の基板がそれぞれ DFU 待機状態（**`DfuTarg`**）でアドバタイズを開始します。
+7. 本ページ上部の「**[ファームウェアの更新方法 (OTAアップデート)](#ファームウェアの更新方法-otaアップデート)**」の手順に従い、`caravelle_left_central_ota.zip`（左手用）と `caravelle_right_peripheral_ota.zip`（右手用）をそれぞれ OTA で書き込んでください。
+8. 書き込み完了後、ホスト（PC / スマホ）側から Bluetooth スキャンを行うと **`"Caravelle"`** という名前で検出されるのでペアリング・接続します。
+   * ※ ホストに対して `"Caravelle"` としてアドバタイズを行うのは **左手側（Central）のみ** です。右手側（Peripheral）は電源を入れると左手側と自動的に無線接続されるため、PC やスマホの Bluetooth 一覧には表示されません。
 
 ---
 
@@ -254,8 +274,3 @@ Mod-Tap (`&mt`) は高速打鍵時の誤ホールドを防ぐ `tap-preferred` �
 * ~~Readmeの導入手順の加筆~~ (対応完了)
 * ~~OpenOCDではなくもっと簡単な nRF Connect for Desktop での導入 (ST-Linkは必要ですが)~~ (対応完了)
 * 不要な設定の削除や、動作改善に関するチューニング
-
-## ソフトデバイスとブートローダの復旧
-* `openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c init -c "reset init" -c halt -c "nrf5 mass_erase" -c "program ./zmk-workspace/bootloader/s132_nrf52_3.0.0_softdevice.hex verify" -c reset -c exit`
-* `openocd -f interface/stlink.cfg -f target/nordic/nrf52.cfg -c "init; halt; program ./zmk-workspace/caravelle_bootloader/caravelle_ble-bootloader.hex verify reset; exit"`
-* ソフトデバイスとブートローダーは本家のCaravelle BLEのビルドガイドに入手先が記載されています
